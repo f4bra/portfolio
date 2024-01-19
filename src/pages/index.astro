@@ -1,50 +1,481 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+// Components
+import Aurora from "../components/Aurora.astro";
+import Infinite from "../components/Infinite.astro";
+import Socials from "../components/Socials.astro";
+import LogoSlider from "../components/LogoSlider.astro";
+import BaseHead from "../components/BaseHead.astro";
+import Project1 from "../components/Project1.astro";
+import Project2 from "../components/Project2.astro";
+import Project3 from "../components/Project3.astro";
+
+// Svgs
+import Signature from "../components/icons/Signature.astro";
+import Lab from "../components/icons/Lab.astro";
+import Accenture from "../components/icons/Accenture.astro";
+import Mercedes from "../components/icons/Mercedes.astro";
+import Harmonic from "../components/icons/Harmonic.astro";
+import Telefonica from "../components/icons/Telefonica.astro";
+import Euipo from "../components/icons/Euipo.astro";
+import Vodafone from "../components/icons/Vodafone.astro";
+import A from "../components/icons/A.astro";
+import Windows from "../components/icons/Windows.astro";
+import ArrowUp from "../components/icons/Arrow-up.astro";
+import Onaturg from "../components/icons/Onaturg.astro";
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
 
-<!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header title={SITE_TITLE} />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+
+  <body
+    class="h-full w-full overflow-x-hidden bg-white text-gray-1000 selection:bg-blue-400 selection:text-gray-900 dark:bg-night dark:text-white"
+  >
+    <div>
+      <div class="border-b border-gray-30 dark:border-gray-800">
+        <div
+          class="mx-auto grid h-2 max-w-8xl grid-cols-12 px-2 xs:h-8 xs:px-6 sm:px-10 xl:h-12 xl:px-10"
+        >
+          <div
+            class="col-span-10 border-x border-gray-30 dark:border-gray-800 md:col-span-4"
+          >
+          </div>
+          <div
+            class="col-span-2 border-r border-gray-30 dark:border-gray-800 min-[896px]:col-span-3"
+          >
+          </div>
+          <div
+            class="col-span-1 hidden border-r border-gray-30 dark:border-gray-800 lg:block"
+          >
+          </div>
+          <div
+            class="col-span-6 hidden border-r border-gray-30 dark:border-gray-800 md:block min-[896px]:col-span-5 lg:col-span-4"
+          >
+          </div>
+        </div>
+      </div>
+      <header class="border-b border-gray-30 dark:border-gray-800">
+        <div class="mx-auto grid max-w-8xl grid-cols-12 px-2 xs:px-6 sm:px-10">
+          <div
+            class="flex items-end border-x border-gray-30 dark:border-gray-800
+            col-span-12
+            lg:col-span-7"
+          >
+            <div class="px-4 pt-10 pb-5 max-sm:px-0 max-sm:pt-0">
+              <Aurora />
+            </div>
+          </div>
+          <div
+            class="hidden border-r border-gray-30 dark:border-gray-800 lg:col-span-1 lg:flex"
+          >
+          </div>
+          <div
+            class="hidden border-x border-gray-30 p-8 dark:border-gray-800 dark:from-gray-800 dark:via-gray-950 dark:to-gray-950
+            lg:col-span-4 lg:flex lg:border-l-0 lg:border-t-0"
+          >
+          </div>
+        </div>
+      </header>
+      <div class="border-b border-gray-30 dark:border-gray-800">
+        <div class="mx-auto grid max-w-8xl grid-cols-12 px-2 xs:px-6 sm:px-10">
+          <div
+            class="order-2 col-span-12 flex flex-col justify-between border-x border-gray-30 dark:border-gray-800 md:order-1 md:col-span-6 min-[896px]:col-span-7 xl:col-span-4"
+          >
+            <div class="px-4 pt-4 xs:px-10 xs:pt-10">
+              <h2
+                class="text-4xl font-bold tracking-wide"
+                style="opacity: 1; transform: none;"
+              >
+                About me
+              </h2>
+              <div class="mt-6 space-y-6 text-lg leading-normal text-gray-50">
+                <p style="opacity: 1; transform: none;">
+                  I’m Carlos Fabra an Engineer from Spain working as a DevOps
+                  &amp; Cloud Engineer, building all sorts of projects and good
+                  ideas.
+                </p>
+                <p style="opacity: 1; transform: none;">
+                  I like to contribute to open source projects and build
+                  webstites.
+                </p>
+                <Signature class="h-12 w-auto" />
+              </div>
+            </div>
+            <div class="p-4 xs:px-10 xs:pt-10">
+              <div class="flex justify-end mb-2">
+                <div class="flex justify-end text-right">
+                  <p class="text-sm font-bold uppercase">Find me at</p>
+                </div>
+              </div>
+              <div class="flex justify-end">
+                <div class="flex justify-end text-right">
+                  <Socials />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="order-3 col-span-12 border-x border-t border-gray-30 bg-gray-5/20 bg-dotted-light bg-center p-4 dark:border-gray-800 dark:bg-transparent dark:bg-dotted-dark xs:p-8 xl:order-3 xl:col-span-4 xl:border-l-0 xl:border-t-0"
+          >
+            <div
+              class="flex items-center space-x-3"
+              style="opacity: 1; transform: none;"
+            >
+              <Lab />
+              <div
+                class="text-sm font-bold uppercase tracking-wide text-gray-1000 dark:text-blue-400"
+              >
+                Projects
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-6 gap-4 xs:mt-6 xs:gap-5">
+              <a
+                target="_blank"
+                href="https://generatedhumans.com/"
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
+                style="opacity: 1; transform: none;"
+              >
+                <div
+                  class="flex h-full items-center justify-between space-x-4 bg-white transition-colors hover:bg-white/90 dark:bg-night dark:hover:bg-transparent"
+                >
+                  <div class="flex-shrink-0 p-6 pr-2">
+                    <h3 class="text-3xl font-bold leading-none">
+                      Visual Network
+                    </h3>
+                    <div class="mt-2 text-lg leading-snug text-gray-50">
+                      Calculate and manage CIDR
+                    </div>
+                  </div>
+                  <Project1 />
+                </div>
+              </a>
+              <a
+                target="_blank"
+                href="https://marketplace.visualstudio.com/items?itemName=CarlosFabra.lucentum-vscode-theme"
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
+                style="opacity: 1; transform: none;"
+              >
+                <div
+                  class="flex h-full items-center justify-between space-x-4 bg-white transition-colors hover:bg-white/90 dark:bg-night dark:hover:bg-transparent"
+                >
+                  <div class="flex-shrink-0 p-6 pr-2">
+                    <h3 class="text-3xl font-bold leading-none">
+                      VSCode Theme
+                    </h3>
+                    <div class="mt-2 text-lg leading-snug text-gray-50">
+                      My personal palette
+                    </div>
+                  </div>
+                  <Project2 />
+                </div>
+              </a>
+              <a
+                target="_blank"
+                href="https://github.com/kuldar/untick"
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
+                style="opacity: 1; transform: none;"
+              >
+                <div
+                  class="flex h-full items-center justify-between space-x-4 bg-white transition-colors hover:bg-white/90 dark:bg-night dark:hover:bg-transparent"
+                >
+                  <div class="flex-shrink-0 p-6 pr-2">
+                    <h3 class="text-3xl font-bold leading-none">Bookmark_X</h3>
+                    <div class="mt-2 text-lg leading-snug text-gray-50">
+                      Tiny Chrome extension
+                    </div>
+                  </div>
+                  <Project3 />
+                </div>
+              </a>
+            </div>
+          </div>
+          <div
+            class="order-1 col-span-12 flex border-x border-gray-30 px-4 pt-4 dark:border-gray-800 xs:px-8 xs:pt-8 md:order-2 md:col-span-6 md:border-l-0 md:border-r md:pb-8 min-[896px]:col-span-5 xl:order-2 xl:col-span-4"
+          >
+            <div
+              class="relative flex h-80 w-64 rounded-2xl border-t border-gray-50/20 bg-night bg-cover bg-center bg-no-repeat p-2 brightness-125 dark:brightness-100 md:h-auto md:w-full"
+              style="background-image: url('/dev.png'); opacity: 1; transform: none;"
+            >
+              <canvas
+                class="absolute inset-0 z-10 hidden cursor-draw md:block"
+                width="388"
+                height="449"
+                style="width: 100%; height: 100%;"></canvas>
+              <div
+                class="flex w-full items-end rounded-xl border border-white/20 p-3 dark:border-gray-50/20"
+              >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-auto max-w-8xl px-2 xs:px-6 sm:px-10">
+        <div
+          class="border-x border-b border-gray-30 dark:border-gray-800 xs:p-20"
+        >
+          <LogoSlider />
+        </div>
+      </div>
+      <div class="border-b border-gray-30 dark:border-gray-800">
+        <div class="mx-auto grid max-w-8xl grid-cols-12 px-2 xs:px-6 sm:px-10">
+          <div
+            class="order-2 col-span-12 flex flex-col-reverse border-x border-gray-30 dark:border-gray-800 lg:order-1 lg:col-span-5 lg:flex-col xl:col-span-4"
+          >
+            <div
+              class="flex h-64 flex-1 flex-col items-center justify-center border-t border-gray-30 px-8 py-8 text-center dark:border-gray-800 lg:border-t-0"
+              style="opacity: 1; transform: none;"
+            >
+              <div class="mb-4 text-lg font-bold leading-snug">
+                Companies <span class="inline lg:block">I've worked with</span>
+              </div>
+              <div
+                class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 p-4"
+              >
+                <a
+                  href="https://www.accenture.com/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Accenture class="h-10 w-auto" />
+                </a>
+                <a
+                  href="https://www.mercedes-benz.com/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Mercedes class="h-15 w-auto" />
+                </a>
+                <a
+                  href="https://www.euipo.europa.eu/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Euipo class="h-13 w-auto" />
+                </a>
+                <a
+                  href="https://www.vodafone.com/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Vodafone class="h-15 w-auto" />
+                </a>
+                <a
+                  href="https://telefonica.com/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Telefonica class="h-14 w-auto" />
+                </a>
+                <a
+                  href="https://harmonicinc.com/"
+                  target="_blank"
+                  class="text-gray-40 transition-colors hover:text-gray-50 active:translate-y-[1px] dark:text-gray-600 dark:hover:text-gray-30"
+                >
+                  <Harmonic class="h-8 w-auto" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="relative order-1 col-span-12 border-r border-gray-30 bg-gradient-to-br from-gray-30/50 via-white to-white dark:border-gray-800 dark:from-gray-700 dark:via-gray-950 dark:to-gray-950 lg:order-2 lg:col-span-7 xl:col-span-8"
+          >
+            <div
+              class="h-full border-l border-gray-30 bg-white/50 p-6 pr-0 transition-colors hover:bg-transparent dark:border-gray-800 dark:bg-night/20 xs:p-10 lg:border-l-0"
+            >
+              <div
+                class="mx-auto flex h-full max-w-md flex-1 flex-col items-center justify-center"
+                style="opacity: 1; transform: none;"
+              >
+                <div class="flex self-start gap-1 text-4xl font-bold">
+                  <h2>
+                    Let's <br />
+                    Work <br />
+                    Together
+                  </h2>
+                  <div class="self-end">
+                    <svg
+                      width="45"
+                      height="45"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke='var(--token-9efc5486-b6d6-4878-8905-1eecd1488e1c, rgb(244, 231, 212)) /* {"name":"Text"} */'
+                      stroke-width="2"
+                      stroke-linejoin="round"
+                    >
+                      <line x1="7" y1="7" x2="17" y2="17"></line>
+                      <polyline points="17 7 17 17 7 17"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="flex self-start gap-10">
+                  <a href="mailto:fabra8@gmail.com">
+                    <button
+                      class="block text-black font-bold mt-10 mb-7 bg-none cursor-pointer border-2 border-black rounded bg-[white] px-6 py-4 text-xl [box-shadow:4px_4px_0_0_#BF0603] transition hover:outline-0 hover:transform hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
+                      >Send an Email</button
+                    >
+                  </a>
+                  <a
+                    href="https://calendar.app.google/FgNyeAuoHmJvP1WR9"
+                    target="_blank"
+                  >
+                    <button
+                      class="block text-black font-bold mt-10 mb-7 bg-none cursor-pointer border-2 border-black rounded bg-[white] px-6 py-4 text-xl [box-shadow:4px_4px_0_0_#1B2CC1] transition hover:outline-0 hover:transform hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
+                      >Schedule a Call</button
+                    >
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mx-auto grid max-w-8xl grid-cols-12 px-2 xs:px-6 sm:px-10">
+          <div
+            class="col-span-12 border-x border-t border-gray-30 bg-gray-5/20 bg-dotted-light bg-center p-4 dark:border-gray-800 dark:bg-transparent dark:bg-dotted-dark xs:p-8"
+          >
+            <div
+              class="flex items-center space-x-3"
+              style="opacity: 1; transform: none;"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-4 text-blue-500 dark:text-white"
+              >
+                <path
+                  d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <div
+                class="text-sm font-bold uppercase tracking-wide text-gray-1000 dark:text-blue-400"
+              >
+                <a href="/blog">Blog</a>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-6 gap-4 xs:mt-6 xs:gap-8">
+              <div
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border-b border-t-0 border-gray-10 bg-gradient-to-br from-gray-10 via-white to-gray-5 active:top-[1px] dark:border-b-0 dark:border-gray-50/20 dark:from-gray-950 dark:via-gray-800 dark:to-gray-950 md:col-span-3 last:md:col-span-6 lg:col-span-2 last:lg:col-span-2"
+                style="opacity: 1; transform: none;"
+              >
+                <a class="h-full w-full" href="/blog/sst/">
+                  <Windows />
+                  <div
+                    class="relative flex h-full flex-col items-start bg-white/50 p-8 transition-colors group-hover/card:bg-transparent dark:bg-gray-950/50"
+                  >
+                    <h2 class="text-5xl font-bold tracking-snug">
+                      Deploy this website
+                    </h2>
+                    <div
+                      class="mb-10 mt-6 flex-1 space-y-6 pr-4 text-lg leading-normal text-gray-50"
+                    >
+                      Learn how this website is deployed using AWS SST
+                    </div>
+                    <div
+                      class="inline-flex items-center space-x-2 rounded-lg border border-gray-30 bg-white py-2 pl-2.5 pr-2 transition-colors group-hover/card:border-gray-40 dark:border-gray-800 dark:bg-gray-900 dark:group-hover/card:border-gray-200"
+                    >
+                      <div
+                        class="text-sm font-bold leading-none text-gray-1000 dark:text-white"
+                      >
+                        View more
+                      </div>
+                      <div
+                        class="flex h-[18px] w-[18px] items-center justify-center rounded-full border border-gray-40 transition-colors group-hover/card:border-blue-500 group-hover/card:bg-blue-500 dark:border-gray-200 dark:group-hover/card:border-blue-400 dark:group-hover/card:bg-blue-400"
+                      >
+                        <ArrowUp />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border-b border-t-0 border-gray-10 bg-gradient-to-br from-gray-10 via-white to-gray-5 active:top-[1px] dark:border-b-0 dark:border-gray-50/20 dark:from-gray-950 dark:via-gray-800 dark:to-gray-950 md:col-span-3 last:md:col-span-6 lg:col-span-2 last:lg:col-span-2"
+                style="opacity: 1; transform: none;"
+              >
+                <a class="h-full w-full" href="https://a-barber.ee/">
+                  <A />
+                  <div
+                    class="relative flex h-full flex-col items-start bg-white/50 p-8 transition-colors group-hover/card:bg-transparent dark:bg-gray-950/50"
+                  >
+                    <h2 class="text-5xl font-bold tracking-snug">Kubernetes</h2>
+                    <div
+                      class="mb-10 mt-6 flex-1 space-y-6 pr-4 text-lg leading-normal text-gray-50"
+                    >
+                      Some branding, marketing design and web development for my
+                      dear sister-in-law.
+                    </div>
+                    <div
+                      class="inline-flex items-center space-x-2 rounded-lg border border-gray-30 bg-white py-2 pl-2.5 pr-2 transition-colors group-hover/card:border-gray-40 dark:border-gray-800 dark:bg-gray-900 dark:group-hover/card:border-gray-200"
+                    >
+                      <div
+                        class="text-sm font-bold leading-none text-gray-1000 dark:text-white"
+                      >
+                        View more
+                      </div>
+                      <div
+                        class="flex h-[18px] w-[18px] items-center justify-center rounded-full border border-gray-40 transition-colors group-hover/card:border-blue-500 group-hover/card:bg-blue-500 dark:border-gray-200 dark:group-hover/card:border-blue-400 dark:group-hover/card:bg-blue-400"
+                      >
+                        <ArrowUp />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border-b border-t-0 border-gray-10 bg-gradient-to-br from-gray-10 via-white to-gray-5 active:top-[1px] dark:border-b-0 dark:border-gray-50/20 dark:from-gray-950 dark:via-gray-800 dark:to-gray-950 md:col-span-3 last:md:col-span-6 lg:col-span-2 last:lg:col-span-2"
+                style="opacity: 1; transform: none;"
+              >
+                <a class="h-full w-full" href="https://ounaturg.ee/">
+                  <Onaturg />
+                  <div
+                    class="relative flex h-full flex-col items-start bg-white/50 p-8 transition-colors group-hover/card:bg-transparent dark:bg-gray-950/50"
+                  >
+                    <h2 class="text-5xl font-bold tracking-snug">Terraform</h2>
+                    <div
+                      class="mb-10 mt-6 flex-1 space-y-6 pr-4 text-lg leading-normal text-gray-50"
+                    >
+                      Designed, co-built and sold a marketplace for selling
+                      second-hand Apple products.
+                    </div>
+                    <div
+                      class="inline-flex items-center space-x-2 rounded-lg border border-gray-30 bg-white py-2 pl-2.5 pr-2 transition-colors group-hover/card:border-gray-40 dark:border-gray-800 dark:bg-gray-900 dark:group-hover/card:border-gray-200"
+                    >
+                      <div
+                        class="text-sm font-bold leading-none text-gray-1000 dark:text-white"
+                      >
+                        View more
+                      </div>
+                      <div
+                        class="flex h-[18px] w-[18px] items-center justify-center rounded-full border border-gray-40 transition-colors group-hover/card:border-blue-500 group-hover/card:bg-blue-500 dark:border-gray-200 dark:group-hover/card:border-blue-400 dark:group-hover/card:bg-blue-400"
+                      >
+                        <ArrowUp />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="border-y border-gray-50 dark:border-gray-800">
+        <div class="mx-auto max-w-8xl px-2 xs:px-6 sm:px-10">
+          <div class="border-x border-gray-50 p-8 dark:border-gray-800 xs:p-20">
+            <div
+              class="text-center mx-auto max-w-2xl text-gray-50 dark:text-gray-400"
+            >
+              Thanks for visiting
+            </div>
+            <div
+              class="text-center mx-auto max-w-2xl text-gray-50 dark:text-gray-700"
+            >
+              © 2024 Carlos Fabra
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>
