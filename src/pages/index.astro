@@ -5,6 +5,7 @@ import Infinite from "../components/Infinite.astro";
 import Socials from "../components/Socials.astro";
 import LogoSlider from "../components/LogoSlider.astro";
 import BaseHead from "../components/BaseHead.astro";
+import Carousel from "../components/Carousel.astro";
 import Project1 from "../components/Project1.astro";
 import Project2 from "../components/Project2.astro";
 import Project3 from "../components/Project3.astro";
@@ -87,7 +88,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
             <div class="px-4 pt-4 xs:px-10 xs:pt-10">
               <h2
                 class="text-4xl font-bold tracking-wide"
-                style="opacity: 1; transform: none;"
+                style="opacity: 1; transform: none; font-grifter"
               >
                 About me
               </h2>
@@ -98,8 +99,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
                   ideas.
                 </p>
                 <p style="opacity: 1; transform: none;">
-                  I like to contribute to open source projects and build
-                  webstites.
+                  I like also enjoy web design and I build webstites for friends
+                  and customers businesses.
                 </p>
                 <Signature class="h-12 w-auto" />
               </div>
@@ -193,21 +194,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
             </div>
           </div>
           <div
-            class="order-1 col-span-12 flex border-x border-gray-30 px-4 pt-4 dark:border-gray-800 xs:px-8 xs:pt-8 md:order-2 md:col-span-6 md:border-l-0 md:border-r md:pb-8 min-[896px]:col-span-5 xl:order-2 xl:col-span-4"
+            class="order-1 col-span-12 flex border-x border-gray-30 px-4 pt-4 dark:border-gray-800 xs:px-8 xs:pt-8 md:order-2 md:col-span-6 md:border-l-0 md:border-r md:pb-4 min-[896px]:col-span-5 xl:order-2 xl:col-span-4"
           >
             <div
-              class="relative flex h-80 w-64 rounded-2xl border-t border-gray-50/20 bg-night bg-cover bg-center bg-no-repeat p-2 brightness-125 dark:brightness-100 md:h-auto md:w-full"
-              style="background-image: url('/dev.png'); opacity: 1; transform: none;"
+              class="relative flex h-80 w-64 rounded-2xl border border-gray-50/5 bg-night bg-cover bg-center bg-no-repeat p-2 brightness-125 dark:brightness-100 md:h-auto md:w-full"
             >
-              <canvas
-                class="absolute inset-0 z-10 hidden cursor-draw md:block"
-                width="388"
-                height="449"
-                style="width: 100%; height: 100%;"></canvas>
-              <div
-                class="flex w-full items-end rounded-xl border border-white/20 p-3 dark:border-gray-50/20"
-              >
-              </div>
+              <Carousel class="rounded-2xl" />
             </div>
           </div>
         </div>

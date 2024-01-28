@@ -1,0 +1,75 @@
+<div
+  {...Astro.props}
+  id="backgroundDiv"
+  style="background-image: url('/images/ff1.png'); opacity: 1; transform: none;"
+>
+  <button
+    id="changeNext"
+    type="button"
+    class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
+  >
+    <svg
+      class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 19l-7-7 7-7"></path></svg
+    >
+  </button>
+  <button
+    id="changePrevious"
+    type="button"
+    class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
+  >
+    <svg
+      class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 5l7 7-7 7"></path></svg
+    >
+  </button>
+</div>
+
+<script>
+  var backgrounds = [
+    "/images/ff1.png",
+    "/images/ff2.png",
+    "/images/ff3.png",
+    "/images/ff4.png",
+    "/images/ff5.png",
+  ];
+
+  var currentIndex = 0;
+  var backgroundDiv = document.getElementById("backgroundDiv");
+
+  document.getElementById("changeNext").onclick = function () {
+    currentIndex = (currentIndex + 1) % backgrounds.length;
+    backgroundDiv.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+  };
+  document.getElementById("changePrevious").onclick = function () {
+    currentIndex = (currentIndex - 1 + backgrounds.length) % backgrounds.length;
+    backgroundDiv.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+  };
+</script>
+
+<style>
+  #backgroundDiv {
+    width: 100%;
+    height: auto;
+    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
