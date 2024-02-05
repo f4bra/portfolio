@@ -1,23 +1,12 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import aws from "astro-sst";
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
 
-import tailwind from "@astrojs/tailwind";
-import mdx from '@astrojs/mdx';
-
-// https://astro.build/config
 export default defineConfig({
+  output: "server",
+  adapter: aws(),
   site: 'https://f4bra.com',
-  integrations: [		
-    mdx({
-			syntaxHighlight: 'shiki',
-			shikiConfig: {
-				theme: 'material-theme-palenight',
-				wrap: true
-			},
-			drafts: true
-		}),
-    sitemap(), 
-    tailwind()
-  ]
+  integrations: [mdx(), sitemap(), tailwind()],
 });
