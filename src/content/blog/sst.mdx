@@ -1,0 +1,186 @@
+---
+title: "Deploy Astro app using Amazon SST"
+heroImage: "/images/sst.webp"
+pubDate: "Jul 08 2022"
+udpateDate: "Jan 10 2024"
+description: "Learn how you can deploy your Astro app or landing super easy and cheap with Amazon SST"
+category: "Web"
+---
+
+# Deploying Astro with AWS SST 🚀
+
+## Introduction
+
+If you are looking to deploy your application on AWS, the Serverless Stack Framework (SST) is a powerful tool that simplifies the process. In this blog post, we'll guide you through the steps to deploy your app using AWS SST.
+
+AWS SST is a bit more complicated than other deployment services such as Vercel or Heroku ($20 - $25 per month) but the main advantage is that is very cheap and you will learn AWS a bit more, which is what we all want right? 😁
+
+![Alt text](https://media.giphy.com/media/4Hmjz2sqdtASJ2gFMH/giphy.gif)
+
+## What is AWS SST?
+
+AWS Service Stack (SST) is an open-source framework for building serverless applications on AWS. It simplifies the development and deployment process by providing a higher-level abstraction and encouraging best practices for serverless application architecture. SST works well with a variety of AWS services like Lambda, API Gateway, DynamoDB, and more, making it a great choice for deploying Next.js apps.
+
+## Prerequisites
+
+Before we dive into deploying your Next.js app, you'll need the following prerequisites:
+
+1. **An AWS account:** You'll need an AWS account to create and manage your serverless resources.
+
+2. **Node.js:** Ensure you have Node.js installed on your local machine.
+
+3. **AWS CLI:** Install the AWS Command Line Interface and configure it with your AWS credentials.
+
+```
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+```
+
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+4. **And of course, your Astro, Next.js or Svelte App**
+
+## Step 1: Create IAM and set up your credentials
+
+### Creating an IAM policy
+
+I recommend to generate a role with the least privilege policies.
+
+For SST to deploy and manage your applications, it requires certain IAM permissions. Below there is a link to an IAM policy with the list of required permissions which you can copy and paste directly into your AWS IAM console and assign the policy to your user.
+
+https://docs.sst.dev/advanced/iam-credentials#iam-permissions
+
+### Add AWS credentials to your project
+
+You can configure your credentials using 'aws config'
+[`png`]
+
+or keep your AWS credentials in a file. By default, SST uses the credentials for the [default] profile. Don't forget to add to your git ignore list.
+
+~/.aws/credentials on Linux, Unix, and macOS;
+C:\Users\USER_NAME\.aws\credentials on Windows
+
+```
+[default]
+aws_access_key_id = <DEFAULT_ACCESS_KEY_ID>
+aws_secret_access_key = <DEFAULT_SECRET_ACCESS_KEY>
+
+[staging]
+aws_access_key_id = <STAGING_ACCESS_KEY_ID>
+aws_secret_access_key = <STAGING_SECRET_ACCESS_KEY>
+
+[production]
+aws_access_key_id = <PRODUCTION_ACCESS_KEY_ID>
+aws_secret_access_key = <PRODUCTION_SECRET_ACCESS_KEY>
+
+```
+
+## Step 2: Install and Configure AWS SST
+
+To get started, you need to install SST globally using your package manager of choise:
+
+```
+pnpm create sst
+pnpm install        # Install SST dependencies
+```
+
+This will create an _sst.config.ts_ file that handles your configuration and metadata.
+
+```sst.config.ts
+import type { SSTConfig } from "sst";
+import { AstroSite } from "sst/constructs";
+
+export default {
+  config(_input) {
+    return {
+      name: "portfolio",
+      region: "us-east-1",
+    };
+  },
+  stacks(app) {
+    app.stack(function Site({ stack }) {
+      const site = new AstroSite(stack, "site");
+      stack.addOutputs({
+        url: site.url,
+      });
+    });
+  },
+} satisfies SSTConfig;
+```
+
+From here we can create a bucket that will store our app files and in my case modify the region. Make sure you import the Bucket construc from sst resources.
+
+
+## Add
+
+Install 
+```
+pnpm add @aws-sdk/client-s3    
+pnpm add @aws-sdk/s3-request-presigner    
+```
+
+Add the following code to your index.astro
+
+```
+const command = new PutObjectCommand({
+  ACL: "public-read",
+  Key: crypto.randomUUID(),
+  Bucket: Bucket.public.bucketName,
+});
+const url = await getSignedUrl(new S3Client({}), command);
+```
+
+
+## Step 3: Create SST App Stack
+
+Now that you've initialized your project, it's time to create your SST app stack. This step involves setting up your project and making choices such as the AWS region and the deployment bucket. Run the following command to create your app stack:
+
+bashCopy code
+
+`sst app add`
+
+SST will guide you through the configuration process.
+
+## Step 4: Create an API Stack
+
+---
+
+Next.js apps typically require an API for interactions. To create the necessary API stack, use the following command:
+
+bashCopy code
+
+`sst api add`
+
+This command automates the setup of an API Gateway and AWS Lambda functions to serve as your API endpoints.
+
+## Step 5: Deploy Your App
+
+---
+
+With your app and API stack configured, it's time to deploy your Next.js app to AWS. To initiate the deployment process, execute the following command:
+
+bashCopy code
+
+`sst deploy`
+
+SST will bundle your Next.js app along with all its dependencies and upload them to AWS Lambda. Additionally, it will create the necessary API Gateway for your app to function as expected.
+
+## Step 6: Verify Your Deployment
+
+---
+
+After the deployment process is complete, you will receive a URL where your Next.js app is hosted. Open this URL in your web browser to verify that your app is running correctly.
+
+## Step 7: Continuous Deployment
+
+---
+
+For seamless continuous deployment, consider setting up a CI/CD pipeline using AWS CodePipeline and AWS CodeBuild. This allows automatic deployment of changes to your app whenever you push code to your repository.
+
+## Conclusion
+
+---
+
+Deploying a Next.js app using AWS SST streamlines the process of leveraging AWS services for your serverless web applications. SST simplifies deployment, enabling you to concentrate on your application's functionality. By following the steps provided in this blog post, you can quickly launch your Next.js app on AWS within a serverless architecture. Happy coding and deploying!
