@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  output: "server",
+  output: "static",
   adapter: aws(),
   site: 'https://f4bra.com',
   integrations: [mdx(), sitemap(), tailwind()],
