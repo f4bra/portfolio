@@ -12,10 +12,22 @@ h1 {
 	font-size: 3.052em;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 37px;
+	margin-top: 1.6em;
+	margin-bottom: 0.5em; 
+ 	color: #fff;
+    font-weight: 600;
+    line-height: 1.25em;
+	    
 }
+
+
+ 
 h3 {
 	font-size: 1.953em;
+	margin-top: 1em;
+	margin-bottom: 0.25em;
+	font-weight: bold;
 }
 h4 {
 	font-size: 1.563em;
@@ -34,7 +46,10 @@ a:hover {
 	color: var(--accent);
 }
 p {
-	margin-bottom: 1em;
+	margin-top: 1.3em;
+	line-height: 28px;
+	font-size: large;
+	font-weight: 400;
 }
 .prose p {
 	margin-bottom: 2em;
@@ -52,7 +67,12 @@ table {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
+	transition: opacity 180ms;
+    border: 2px solid #0C0C17;
+    border-radius: 3px;
+    display: block;
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
 }
 code {
 	padding: 2px 5px;
