@@ -1,75 +1,63 @@
 <div
   {...Astro.props}
-  id="backgroundDiv"
-  style="background-image: url('/images/ff1.png'); opacity: 1; transform: none;"
+  class="flex justify-center items-center w-full h-auto relative bg-center bg-no-repeat bg-contain"
 >
+  <img
+    id="imgContainer"
+    class="rounded-2xl center w-80"
+    src="/images/cf1.webp"
+    alt="carlos fabra devops engineer"
+  />
   <button
-    id="changeNext"
+    id="magic"
     type="button"
-    class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
+    class="rounded-full
+    p-2
+    absolute
+    top-0
+    right-0
+    z-30
+    cursor-pointer"
   >
     <svg
-      class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
+      fill="#fff"
+      width="44"
+      height="44"
+      viewBox="0 0 30 32"
       xmlns="http://www.w3.org/2000/svg"
-      ><path
+      stroke="#fff"
+      class="fill-current text-gray-500 hover:text-amber-200 transition-colors duration-300 ease-in-out"
+      transform="scale(-1 1)"
+      stroke-width="0"
+      ><g></g><g
         stroke-linecap="round"
         stroke-linejoin="round"
-        stroke-width="2"
-        d="M15 19l-7-7 7-7"></path></svg
-    >
-  </button>
-  <button
-    id="changePrevious"
-    type="button"
-    class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-  >
-    <svg
-      class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      ><path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M9 5l7 7-7 7"></path></svg
+        stroke-width=".064"></g><path
+        d="m9.5 9.625-.906 2.906-.875-2.906-2.906-.906 2.906-.875.875-2.938.906 2.938 2.906.875zm5.063-1.594L14.125 9.5l-.5-1.469-1.438-.469 1.438-.438.5-1.438.438 1.438 1.438.438zM.281 24 18.187 6.625a.669.669 0 0 1 .531-.25.946.946 0 0 1 .781.281c.094.063.219.188.406.344.344.313.719.688 1 1.063.125.188.188.344.188.5.031.313-.063.594-.25.781L2.937 26.782c-.156.156-.344.219-.563.25a.946.946 0 0 1-.781-.281c-.094-.094-.219-.188-.406-.375-.344-.281-.719-.656-.969-1.063a1.476 1.476 0 0 1-.219-.531.912.912 0 0 1 .281-.781zm14.375-12.625 1.313 1.344 4.156-4.031-1.313-1.375zm-8.718 1.781-.406 1.438-.438-1.438-1.438-.469 1.438-.438.438-1.469.406 1.469 1.5.438zM20.5 12.063l.469 1.469 1.438.438-1.438.469-.469 1.438-.469-1.438-1.438-.469 1.438-.438z"
+        stroke="none"></path></svg
     >
   </button>
 </div>
 
 <script>
-  var backgrounds = [
-    "/images/ff1.png",
-    "/images/ff2.png",
-    "/images/ff3.png",
-    "/images/ff4.png",
-    "/images/ff5.png",
+  const img = document.getElementById("imgContainer") as HTMLImageElement;
+  var imgs = [
+    "/images/cf1.webp",
+    "/images/cf2.webp",
+    "/images/cf3.webp",
+    "/images/cf4.webp",
+    "/images/cf5.webp",
+    "/images/cf6.webp",
+    "/images/cf7.webp",
+    "/images/cf8.webp",
   ];
 
-  var currentIndex = 0;
-  var backgroundDiv = document.getElementById("backgroundDiv");
+  var currentIndex: number = 0;
 
-  document.getElementById("changeNext").onclick = function () {
-    currentIndex = (currentIndex + 1) % backgrounds.length;
-    backgroundDiv.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
-  };
-  document.getElementById("changePrevious").onclick = function () {
-    currentIndex = (currentIndex - 1 + backgrounds.length) % backgrounds.length;
-    backgroundDiv.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+  document.getElementById("magic").onclick = function () {
+    if (img) {
+      currentIndex = (currentIndex + 1) % imgs.length;
+      img.src = imgs[currentIndex];
+    }
   };
 </script>
-
-<style>
-  #backgroundDiv {
-    width: 100%;
-    height: auto;
-    position: relative;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-</style>
