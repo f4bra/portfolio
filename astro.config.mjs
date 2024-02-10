@@ -8,5 +8,13 @@ export default defineConfig({
   output: "static",
   adapter: aws(),
   site: 'https://f4bra.com',
-  integrations: [mdx(), sitemap(), tailwind()],
+  integrations: [
+  mdx({
+      syntaxHighlight: 'shiki',
+      shikiConfig: { theme: 'one-dark-pro' },
+    }
+  ), 
+  sitemap(), 
+  tailwind()
+  ],
 });
