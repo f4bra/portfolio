@@ -11,9 +11,15 @@ export default {
   },
   stacks(app) {
     app.stack(function Site({ stack }) {
+
       const bucket = new Bucket(stack, "public");
+      
       const site = new AstroSite(stack, "site", {
         bind: [bucket],
+        customDomain:{
+          domainName: "f4bra.com",
+          domainAlias: "www.f4bra.com",
+        }
       });
       stack.addOutputs({
         url: site.url,
