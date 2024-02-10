@@ -18,6 +18,43 @@ import "../styles/md.css";
 >
   <head>
     <BaseHead title={title} description={description} />
+    <script>
+      let copyButtonLabel = "Ctrl + C";
+      let codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+      for (let codeBlock of codeBlocks) {
+        let wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+
+        let copyButton = document.createElement("button");
+        copyButton.className =
+          "absolute bg-emerald-700 rounded-bl-lg text-xs text-white leading-4 px-2 py-1 right-0 top-0 hover:bg-indigo-900;";
+        copyButton.innerHTML = copyButtonLabel;
+
+        codeBlock.setAttribute("tabindex", "0");
+        codeBlock.appendChild(copyButton);
+
+        codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+        wrapper.appendChild(codeBlock);
+
+        copyButton.addEventListener("click", async () => {
+          await copyCode(codeBlock, copyButton);
+        });
+      }
+
+      async function copyCode(block, button) {
+        let code = block.querySelector("code");
+        let text = code.innerText;
+
+        await navigator.clipboard.writeText(text);
+
+        button.innerText = "  😎👍 ";
+
+        setTimeout(() => {
+          button.innerText = copyButtonLabel;
+        }, 1000);
+      }
+    </script>
   </head>
   <body>
     <Header />
@@ -30,9 +67,9 @@ import "../styles/md.css";
         >
           {heroImage && <img src={heroImage} alt="" />}
         </div>
-        <div class="prose">
-          <div class="title">
-            <div>
+        <div class="max-w-3xl text-gray-200 m-auto pt-5 p-1">
+          <div class="text-center mt-12">
+            <div class="text-gray-500">
               <FormattedDate date={pubDate} />
               {
                 updatedDate && (
@@ -43,6 +80,9 @@ import "../styles/md.css";
               }
             </div>
             <h1 class="text-3xl font-bold m-5">{title}</h1>
+            <hr
+              class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-25 dark:opacity-100"
+            />
             <hr class="border-gray-50 dark:border-gray-800" />
           </div>
           <slot />
@@ -50,23 +90,5 @@ import "../styles/md.css";
       </article>
     </main>
     <Footer />
-    <style>
-      .prose {
-        max-width: calc(100% - 2em);
-        margin: auto;
-        padding: 1em;
-        color: rgb(var(--gray-dark));
-      }
-      .title {
-        margin-bottom: 1em;
-        padding: 1em 0;
-        text-align: center;
-        line-height: 1;
-      }
-      .date {
-        margin-bottom: 0.5em;
-        color: rgb(var(--gray));
-      }
-    </style>
   </body>
 </html>
