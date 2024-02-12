@@ -169,6 +169,7 @@
 <style>
   section {
     padding: 0em;
+    min-height: 1.25rem;
   }
 
   .defs {
@@ -177,7 +178,7 @@
 
   .section {
     --color-text: #c1c1c1;
-    --size: clamp(3rem, 0.5rem + 14vmin, 14rem);
+    --size: clamp(10rem, 0.5rem + 14vmin, 14rem);
     --gap: calc(var(--size) / 50);
     --duration: 120s;
     --scroll-start: 0;
@@ -187,6 +188,11 @@
     .section {
       --color-text: #4b5563;
       --color-text-hover: white;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    :root {
+      --gap: 0;
     }
   }
 
