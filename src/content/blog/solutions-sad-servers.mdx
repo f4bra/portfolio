@@ -1,0 +1,548 @@
+---
+title: "Solving Sadservers"
+description: "SRE/DevOps challenges"
+pubDate: "Jan 29 2024"
+heroImage: "/images/sad-servers.webp"
+---
+
+Saint John
+Santiago
+Saskatoon
+Tokyo
+Manhattan
+Capetown
+Salta
+Jakarta
+
+# Intro
+
+SadServers is a LeetCode style puzzle for Sysadmins/Site Reliability Engineers/DevOps Engineers or whatever Ops people in IT are called nowadays. The following is a writeup of walking through the challenges given.
+
+# Saint John
+
+A developer created a testing program that is continuously writing to a log file /var/log/bad.log and filling up disk. You can check for example with tail -f /var/log/bad.log. This program is no longer needed. Find it and terminate it.
+
+So let’s see what is accessing this file with lsof:
+
+$ lsof /var/log/bad.log
+COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
+badlog.py 621 ubuntu 3w REG 259,1 10629 67701 /var/log/bad.log
+Second column lists the ID of the process what writes to the log.
+
+We’ll kill ist with kill:
+
+kill 621
+
+Santiago
+Alice the spy has hidden a secret number combination, find it using these instructions:
+
+1) Find the number of lines where the string Alice occurs in *.txt files in the /home/admin directory 2) There’s a file where “Alice” appears exactly once. In the line after that ocurrence there’s a number. Write both numbers consecutively as one (no new line or spaces) to the solution file (eg if the first number from 1) is 11 and the second 22, you can do echo -n 11 > /home/admin/solution; echo 22 >> /home/admin/solution
+
+A little shell tool magic… grep -Hc file gives us file names and match counters. cut cuts up files on delimiters, grep -oEe allows regex-based extraction of values.
+
+Ad 1):
+
+$ grep Alice -Hnc *.txt | \
+	cut -d : -f 2 | \
+	python3 -c "import sys; print(sum(int(l) for l in sys.stdin))"
+Find the word “Alice” in the target *.txt files and count the occurences by file, |
+select the counters only from the previous grep output and |
+sum up the resulting list of numbers with a short python script.
+
+Ad 2):
+
+grep Alice -Hnc *.txt | grep -Ee :1$ | cut -d: -f1
+Find and count Alice in all target files, |
+filter out the file containing only a single occurence |
+and get the filename.
+
+$ grep -A1 Alice \
+	$(grep Alice -Hnc *.txt | grep -Ee :1$ | cut -d: -f1) | \
+	grep -oEe "[0-9]+"
+Find the occurence in the file found earlier again, but this time find the line after the matching line with -A1, |
+select only numbers from the output.
+
+echo ${PART1}${PART2} > /home/admin/solution
+Concat both parts, add a newline at the end and write the result to the given file.
+
+As a oneliner:
+
+echo \
+	$(grep Alice -Hnc *.txt | cut -d : -f 2 | python3 -c "import sys; print(sum(int(l) for l in sys.stdin))")$(grep -A1 Alice $(grep Alice -Hnc *.txt | grep -Ee :1$ | cut -d: -f1) | grep -oEe "[0-9]+") \
+	> /home/admin/solution
+Saskatoon
+There’s a web server access log file at /home/admin/access.log. The file consists of one line per HTTP request, with the requester’s IP address at the beginning of each line.
+
+Find what’s the IP address that has the most requests in this file (there’s no tie; the IP is unique). Write the solution into a file /home/admin/highestip.txt. For example, if your solution is “1.2.3.4”, you can do echo "1.2.3.4" > /home/admin/highestip.txt
+
+# -o Only print matching part, -E extended regex, -e pattern is a regex
+# IP addresses Regex for
+#  0-255.0-255.0-255.0-255
+grep -oEe \
+  '[12]?[0-9]{1,2}[.][12]?[0-9]{1,2}[.][12]?[0-9]{1,2}[.][12]?[0-9]{1,2}' \
+	access.log
+This yields a list of IP addresses. Now we need to sort and count (sort | uniq -c), sort by the leading count, highest at the bottom (sort -n), pick the last one (tail -n1), and from the resulting line, pick the second field as it’s the IP address. Write it to the result file > /home/admin/highestip.txt.
+
+As a oneliner:
+
+grep -oEe '[12]?[0-9]{1,2}[.][12]?[0-9]{1,2}[.][12]?[0-9]{1,2}[.][12]?[0-9]{1,2}' access.log | \
+	sort | \
+	uniq -c | \
+	sort -n | \
+	tail -n1 | \
+	awk '{ print $2 }' \
+	> /home/admin/highestip.txt
+Tokyo
+There’s a web server serving a file /var/www/html/index.html with content “hello sadserver” but when we try to check it locally with an HTTP client like curl 127.0.0.1:80, nothing is returned. This scenario is not about the particular web server configuration and you only need to have general knowledge about how web servers work.
+
+ss tells us that we’re dealing with Apache here:
+
+# ss -panetl | grep 80
+LISTEN 0      511                *:80              *:*    users:(("apache2",pid=774,fd=4),("apache2",pid=773,fd=4),("apache2",pid=635,fd=4)) ino:17412 sk:1002 cgroup:/system.slice/apache2.service v6only:0 <->
+LISTEN 0      4096               *:8080            *:*    users:(("gotty",pid=551,fd=6)) ino:16863 sk:1003 cgroup:/system.slice/gotty.service v6only:0 <->
+As it’s Debian, apache2ctl -S tells us that there’s no special config here, it’s pretty much boiler plate:
+
+# apache2ctl -S
+VirtualHost configuration:
+*:80                   ip-172-31-21-14.us-east-2.compute.internal (/etc/apache2/sites-enabled/000-default.conf:1)
+ServerRoot: "/etc/apache2"
+Main DocumentRoot: "/var/www/html"
+Main ErrorLog: "/var/log/apache2/error.log"
+Mutex default: dir="/var/run/apache2/" mechanism=default
+Mutex watchdog-callback: using_defaults
+PidFile: "/var/run/apache2/apache2.pid"
+Define: DUMP_VHOSTS
+Define: DUMP_RUN_CFG
+User: name="www-data" id=33
+Group: name="www-data" id=33
+So let’s just try it:
+
+# curl localhost
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Apache/2.4.52 (Ubuntu) Server at localhost Port 80</address>
+</body></html>
+So, what does Apache say?
+
+# cat /var/log/apache2/error.log
+[Mon Dec 26 19:06:44.506725 2022] [mpm_event:notice] [pid 635:tid 140509137360768] AH00489: Apache/2.4.52 (Ubuntu) configured -- resuming normal operations
+[Mon Dec 26 19:06:44.506755 2022] [core:notice] [pid 635:tid 140509137360768] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Dec 26 19:11:36.248299 2022] [core:error] [pid 773:tid 140508974245440] (13)Permission denied: [client ::1:52158] AH00132: file permissions deny server access: /var/www/html/index.html
+Ah. File permissions. Check it out…
+
+# sudo -u www-data namei -mx /var/www/html/index.html
+f: /var/www/html/index.html
+ Drwxr-xr-x /
+ drwxr-xr-x var
+ drwxr-xr-x www
+ drwxr-xr-x html
+ -rw------- index.html
+Ok, path to the file is fine. The permissions on the file itself seem off though…
+
+# ls -lhA /var/www/html/
+total 4.0K
+-rw------- 1 root root 16 Aug  1 00:40 index.html
+Jup, Apache’s user www-data is not able to access the file.
+
+So change the file’s permissions:
+
+chmod a+r /var/www/html/index.html
+# curl localhost
+hello sadserver
+curl 127.0.0.1:80 hangs though. Strange. The earlier commands ss and apache2ctl reveal that Apache listens on all IP addresses, SELinux et al. aren’t active as it’s Debian. So… IPTables shenanigans?
+
+# iptables-save
+# Generated by iptables-save v1.8.7 on Mon Dec 26 19:19:54 2022
+*filter
+:INPUT ACCEPT [1677:121936]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [1690:328212]
+-A INPUT -p tcp -m tcp --dport 80 -j DROP
+COMMIT
+# Completed on Mon Dec 26 19:19:54 2022
+Indeed. iptables -F takes care of that, done.
+
+As a oneliner:
+
+chmod a+r /var/www/html/index.html ; iptables -F
+Manhattan
+Your objective is to be able to insert a row in an existing Postgres database. The issue is not specific to Postgres and you don’t need to know details about it (although it may help).
+
+Helpful Postgres information: it’s a service that listens to a port (:5432) and writes to disk in a data directory, the location of which is defined in the data_directory parameter of the configuration file /etc/postgresql/14/main/postgresql.conf. In our case Postgres is managed by systemd as a unit with name postgresql.
+
+Can’t write file? Check if the disk is full… With df -h:
+
+# df -h
+Filesystem       Size  Used Avail Use% Mounted on
+udev             224M     0  224M   0% /dev
+tmpfs             47M  1.5M   46M   4% /run
+/dev/nvme1n1p1   7.7G  1.2G  6.1G  17% /
+tmpfs            233M     0  233M   0% /dev/shm
+tmpfs            5.0M     0  5.0M   0% /run/lock
+tmpfs            233M     0  233M   0% /sys/fs/cgroup
+/dev/nvme1n1p15  124M  278K  124M   1% /boot/efi
+/dev/nvme0n1     8.0G  8.0G   28K 100% /opt/pgdata
+Let’s look into it…
+
+# ls -lhA
+total 8.0G
+-rw-r--r--  1 root     root       69 May 21  2022 deleteme
+-rw-r--r--  1 root     root     7.0G May 21  2022 file1.bk
+-rw-r--r--  1 root     root     923M May 21  2022 file2.bk
+-rw-r--r--  1 root     root     488K May 21  2022 file3.bk
+drwx------ 19 postgres postgres 4.0K May 21  2022 main
+Purge files and restart the database:
+
+# rm -f *.bk
+# systemctl restart postgres
+As a oneliner:
+
+rm -f /opt/pgdata/*.bk ; systemctl restart postgres
+Capetown
+There’s an Nginx web server installed and managed by systemd. Running curl -I 127.0.0.1:80 returns curl: (7) Failed to connect to localhost port 80: Connection refused, fix it so when you curl you get the default Nginx page.
+
+Broken nginx, eh? Let’s ask SystemD what’s up with it:
+
+# systemctl status nginx
+● nginx.service - The NGINX HTTP and reverse proxy server
+     Loaded: loaded (/etc/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Mon 2022-12-26 19:32:01 UTC; 1min 21s ago
+    Process: 570 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=1/FAILURE)
+        CPU: 30ms
+
+Dec 26 19:32:01 ip-172-31-40-160 nginx[570]: nginx: [emerg] unexpected ";" in /etc/nginx/sites-enabled/default:1
+Dec 26 19:32:01 ip-172-31-40-160 nginx[570]: nginx: configuration file /etc/nginx/nginx.conf test failed
+Dec 26 19:32:00 ip-172-31-40-160 systemd[1]: Starting The NGINX HTTP and reverse proxy server...
+Dec 26 19:32:01 ip-172-31-40-160 systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+Dec 26 19:32:01 ip-172-31-40-160 systemd[1]: nginx.service: Failed with result 'exit-code'.
+Dec 26 19:32:01 ip-172-31-40-160 systemd[1]: Failed to start The NGINX HTTP and reverse proxy server.
+Ok, so the config’s invalid - the first line is only a ‘;’. Remove it and restart nginx:
+
+$ sed -i -e 1d /etc/nginx/sites-enabled/default
+$ systemctl restart nginx
+Test:
+
+# curl localhost
+<html>
+<head><title>500 Internal Server Error</title></head>
+<body>
+<center><h1>500 Internal Server Error</h1></center>
+<hr><center>nginx/1.18.0</center>
+</body>
+</html>
+Damn it, it’s still not working. Check its log file:
+
+# cat /var/log/nginx/error.log
+2022/12/26 19:37:18 [alert] 961#961: socketpair() failed while spawning "worker process" (24: Too many open files)
+2022/12/26 19:37:18 [emerg] 962#962: eventfd() failed (24: Too many open files)
+2022/12/26 19:37:18 [alert] 962#962: socketpair() failed (24: Too many open files)
+2022/12/26 19:37:22 [crit] 962#962: *1 open() "/var/www/html/index.nginx-debian.html" failed (24: Too many open files), client: 127.0.0.1, server: _, request: "GET / HTTP/1.1", host: "localhost"
+Too many open files… Normally, we would check /etc/security/limits.conf, but as it’s SystemD managed we have to look at the unit:
+
+# systemctl cat nginx
+# /etc/systemd/system/nginx.service
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+LimitNOFILE=10
+
+[Install]
+WantedBy=multi-user.target
+Ah great. Edit the unit and reload.
+
+# sed -i -e /LimitNOFILE/d /etc/systemd/system/nginx.service
+# systemctl daemon-reload
+# systemctl restart nginx
+# !curl
+curl localhost
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+Done.
+
+As a oneliner:
+
+sed -i -e 1d /etc/nginx/sites-enabled/default ; \
+sed -i -e /LimitNOFILE/d /etc/systemd/system/nginx.service ; \
+systemctl daemon-reload ; \
+systemctl restart nginx
+Salta
+There’s a “dockerized” Node.js web application in the /home/admin/app directory. Create a Docker container so you get a web app on port :8888 and can curl to it. For the solution to be valid, there should be only one running Docker container.
+
+First we check if it’s even broken:
+
+admin@ip-172-31-34-225:~/app$ curl localhost:8888
+these are not the droids you're looking for
+Huh, odd - somethings listening on that port. What’s going on here, tell us ss!
+
+$ ss -panetl | grep 8888
+LISTEN 0      511          0.0.0.0:8888      0.0.0.0:*    ino:11536 sk:2 cgroup:/system.slice/nginx.service <->                                                       
+LISTEN 0      511             [::]:8888         [::]:*    ino:11537 sk:6 cgroup:/system.slice/nginx.service v6only:1 <->                                              
+Ah, Nginx - disable it:
+
+$ sudo systemctl disable --now nginx
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install disable nginx
+Removed /etc/systemd/system/multi-user.target.wants/nginx.service.
+Ok, so let’s check out what docker is giving us:
+
+# docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS                    PORTS     NAMES
+124a4fb17a1c   app       "docker-entrypoint.s…"   3 months ago   Exited (1) 3 months ago             elated_taussig
+# docker logs elated_taussig
+node:internal/modules/cjs/loader:928
+  throw err;
+  ^
+
+Error: Cannot find module '/usr/src/app/serve.js'
+    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:925:15)
+    at Function.Module._load (node:internal/modules/cjs/loader:769:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)
+    at node:internal/main/run_main_module:17:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+So it seems that the container image is broken somehow. We’re given the image’s source in admin’s homedirectory.
+
+admin@ip-xxx:~/app$ ls
+Dockerfile  package-lock.json  package.json  server.js
+admin@ip-xxx:~/app$ cat Dockerfile
+# documentation https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+
+# most recent node (security patches) and alpine (minimal, adds to security, possible libc issues)
+FROM node:15.7-alpine
+
+# Create app directory & copy app files
+WORKDIR /usr/src/app
+
+# we copy first package.json only, so we take advantage of cached Docker layers
+COPY ./package*.json ./
+
+# RUN npm ci --only=production
+RUN npm install
+
+# Copy app source
+COPY ./* ./
+
+# port used by this app
+EXPOSE 8880
+
+# command to run
+CMD [ "node", "serve.js" ]
+Port should be 8888, and the file name in CMD should be server.js
+
+Make the changes and rebuild the container image:
+
+admin@ip-xxx:~/app$ sudo docker build -t app:latest .
+Sending build context to Docker daemon  101.9kB
+Step 1/7 : FROM node:15.7-alpine
+ ---> 706d12284dd5
+Step 2/7 : WORKDIR /usr/src/app
+ ---> Using cache
+ ---> 463b1571f18e
+Step 3/7 : COPY ./package*.json ./
+ ---> Using cache
+ ---> acfb467c80ba
+Step 4/7 : RUN npm install
+ ---> Using cache
+ ---> 5cad5aa08c7a
+Step 5/7 : COPY ./* ./
+ ---> 59c0ca1ef224
+Step 6/7 : EXPOSE 8888
+ ---> Running in 2e5faf8ee253
+Removing intermediate container 2e5faf8ee253
+ ---> c3127219be52
+Step 7/7 : CMD [ "node", "server.js" ]
+ ---> Running in 5d24a99a1a9e
+Removing intermediate container 5d24a99a1a9e
+ ---> 3774cc41c752
+Successfully built 3774cc41c752
+Successfully tagged app:latest
+Start the container and check the results:
+
+admin@ip-xxx:~/app$ sudo docker run -d -p 8888:8888 app:latest
+397a69aa6832fb6edc922b733fd55c6df169963f30875308287f2298ab99730e
+admin@ip-xxx:~/app$ !curl
+curl localhost:8888
+Hello World!
+Done
+
+As a oneliner:
+
+sudo systemctl disable --now nginx ; \
+cd ~/app ; \
+sed -i \
+	-e 's/8880/8888/g' \
+	-e 's/serve.js/server.js/g' \
+	Dockerfile ; \
+sudo docker build -t app:latest . ; \
+sudo docker run -d -p 8888:8888 app:latest
+Jakarta
+Can’t ping google.com. It returns ping: google.com: Name or service not known. Expected is being able to resolve the hostname. (Note: currently the VMs can’t ping outside so there’s no automated check for the solution).
+
+Check files connected to DNS resolution (/etc/hosts, /etc/resolv.conf), check relevant services:
+
+ubuntu@ip-172-31-42-233:/$ cat /etc/hosts
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+ubuntu@ip-172-31-42-233:/$ cat /etc/resolv.conf
+# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8).
+# Do not edit.
+#
+# This file might be symlinked as /etc/resolv.conf. If you're looking at
+# /etc/resolv.conf and seeing this text, you have followed the symlink.
+#
+# This is a dynamic resolv.conf file for connecting local clients to the
+# internal DNS stub resolver of systemd-resolved. This file lists all
+# configured search domains.
+#
+# Run "resolvectl status" to see details about the uplink DNS servers
+# currently in use.
+#
+# Third party programs should typically not access this file directly, but only
+# through the symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a
+# different way, replace this symlink by a static file or a different symlink.
+#
+# See man:systemd-resolved.service(8) for details about the supported modes of
+# operation for /etc/resolv.conf.
+
+nameserver 127.0.0.53
+options edns0 trust-ad
+search us-east-2.compute.internal
+ubuntu@ip-172-31-42-233:/$ systemctl status systemd-resolved
+● systemd-resolved.service - Network Name Resolution
+     Loaded: loaded (/lib/systemd/system/systemd-resolved.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2022-12-26 20:12:19 UTC; 1min 27s ago
+       Docs: man:systemd-resolved.service(8)
+             man:org.freedesktop.resolve1(5)
+             https://www.freedesktop.org/wiki/Software/systemd/writing-network-configuration-managers
+             https://www.freedesktop.org/wiki/Software/systemd/writing-resolver-clients
+   Main PID: 434 (systemd-resolve)
+     Status: "Processing requests..."
+      Tasks: 1 (limit: 521)
+     Memory: 8.2M
+        CPU: 115ms
+     CGroup: /system.slice/systemd-resolved.service
+             └─434 /lib/systemd/systemd-resolved
+
+Dec 26 20:12:18 ip-172-31-42-233 systemd[1]: Starting Network Name Resolution...
+Dec 26 20:12:18 ip-172-31-42-233 systemd-resolved[434]: Positive Trust Anchors:
+Dec 26 20:12:18 ip-172-31-42-233 systemd-resolved[434]: . IN DS 20326 8 2 e06d44b80b8f1d39a95c0b0d7c65d0>
+Dec 26 20:12:18 ip-172-31-42-233 systemd-resolved[434]: Negative trust anchors: home.arpa 10.in-addr.arp>
+Dec 26 20:12:19 ip-172-31-42-233 systemd-resolved[434]: Using system hostname 'ip-172-31-42-233'.
+Dec 26 20:12:19 ip-172-31-42-233 systemd[1]: Started Network Name Resolution.
+Dec 26 20:12:22 ip-172-31-42-233 systemd-resolved[434]: ens5: Failed to read DNSSEC negative trust ancho>
+It’s all good. Is DNS resolution really broken?
+
+ubuntu@ip-172-31-42-233:/$ ping www.google.com
+ping: www.google.com: Name or service not known
+Yes, it is.
+
+Does DNS resolution work, or is the network to blame?
+
+$ dig www.google.at
+
+; <<>> DiG 9.18.1-1ubuntu1.1-Ubuntu <<>> www.google.at
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 52104
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;www.google.at.                 IN      A
+
+;; ANSWER SECTION:
+www.google.at.          300     IN      A       142.250.191.163
+
+;; Query time: 116 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Mon Dec 26 20:21:23 UTC 2022
+;; MSG SIZE  rcvd: 58
+So the SystemD resolved cached the entry and things work as they should on that end.
+
+So… is DNS really used by the system? Check /etc/nsswitch.conf:
+
+ubuntu@ip-172-31-42-233:/$ cat /etc/nsswitch.conf
+# /etc/nsswitch.conf
+#
+# Example configuration of GNU Name Service Switch functionality.
+# If you have the `glibc-doc-reference' and `info' packages installed, try:
+# `info libc "Name Service Switch"' for information about this file.
+
+passwd:         files systemd
+group:          files systemd
+shadow:         files
+gshadow:        files
+
+hosts:          files
+networks:       files
+
+protocols:      db files
+services:       db files
+ethers:         db files
+rpc:            db files
+
+netgroup:       nis
+The hosts: line should look differently. On my box, it looks like this:
+
+hosts: mymachines resolve [!UNAVAIL=return] files myhostname dns
+So let’s put that in:
+
+ubuntu@ip-172-31-42-233:/$ sudo vim /etc/nsswitch.conf
+sudo: unable to resolve host ip-172-31-42-233: Name or service not known
+ubuntu@ip-172-31-42-233:/$ ping www.google.com
+PING www.google.com (142.251.32.4) 56(84) bytes of data.
+^C
+--- www.google.com ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1005ms
+Jup, works now.
+
+As a oneliner:
+
+sed \
+	-i -e 's/hosts:.*/hosts: mymachines resolve [!UNAVAIL=return] files myhostname dns/' \
+	/etc/nsswitch.conf
