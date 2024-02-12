@@ -117,6 +117,7 @@ User: name="www-data" id=33
 Group: name="www-data" id=33
 So let’s just try it:
 
+``` html
 # curl localhost
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
@@ -127,6 +128,8 @@ So let’s just try it:
 <hr>
 <address>Apache/2.4.52 (Ubuntu) Server at localhost Port 80</address>
 </body></html>
+```
+
 So, what does Apache say?
 
 # cat /var/log/apache2/error.log
