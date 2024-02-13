@@ -22,4 +22,4 @@ jobs:
           aws-region: eu-central-1
       - name: Deploy app
         run: |
-          npm ci && npx sst deploy
+          pnpm ci && pnpm sst deploy
