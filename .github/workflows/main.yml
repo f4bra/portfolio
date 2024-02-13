@@ -20,6 +20,8 @@ jobs:
           role-to-assume: arn:aws:iam::893906031708:role/GitHub
           role-duration-seconds: 3600
           aws-region: eu-central-1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
       - name: Deploy app
         run: |
           pnpm ci && pnpm sst deploy
