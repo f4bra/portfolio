@@ -1,68 +1,31 @@
-# Astro Starter Kit: Blog
+# Carlos Fabra - DevOps Engineer Portfolio
 
-```sh
-npm create astro@latest -- --template blog
-```
+Welcome to my DevOps Engineer portfolio! I am passionate about building robust, scalable, and automated infrastructure to support modern software development practices. This portfolio showcases my skills, projects, and experiences in the field of DevOps.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+## About Me
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+I am a results-driven DevOps engineer with +9 years of experience in designing, implementing, and maintaining CI/CD pipelines, cloud infrastructure, and container orchestration systems. My expertise lies in leveraging tools like Docker, Kubernetes, Jenkins, and AWS to streamline development workflows and improve overall efficiency.
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+## Skills
 
-Features:
+- **CI/CD:** Jenkins, GitLab CI/CD, Travis CI, CircleCI
+- **Containerization:** Docker, Kubernetes, Helm
+- **Cloud Platforms:** AWS, Azure, Google Cloud Platform
+- **Infrastructure as Code:** Terraform, CloudFormation
+- **Configuration Management:** Ansible, Puppet, Chef
+- **Monitoring and Logging:** Prometheus, Grafana, ELK Stack
+- **Scripting/Programming:** Bash, Python, Ruby
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+## Certifications
 
-## 🚀 Project Structure
+- Certified Kubernetes Administrator (CKA)
+- AZ-400: Designing and Implementing Microsoft DevOps Solutions
+- AWS Certified DevOps Engineer - Professional
+- Docker Certified Associate (DCA)
 
-Inside of your Astro project, you'll see the following folders and files:
+## Contact Me
 
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
+- **LinkedIn:** [Carlos Fabra](https://www.linkedin.com/in/carlos-fabra-03a71988/)
+- **Email:** fabra8@gmail.com
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Feel free to reach out if you have any questions or would like to discuss potential opportunities!
