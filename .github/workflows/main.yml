@@ -26,4 +26,4 @@ jobs:
           version: 8
       - name: Deploy app
         run: |
-          pnpm ci && pnpm sst deploy
+          pnpm i && pnpm sst deploy
