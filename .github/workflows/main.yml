@@ -1,13 +1,12 @@
 name: SST deployment
 on: push
 
-# Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
 concurrency:
   group: merge-${{ github.ref }}
 
 permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
+  id-token: write
+  contents: read
 
 jobs:
   DeployApp:
@@ -19,7 +18,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::893906031708:role/GitHub
-          role-duration-seconds: 14390 #adjust as needed for your build time
+          role-duration-seconds: 3600
           aws-region: eu-central-1
       - name: Deploy app
         run: |
