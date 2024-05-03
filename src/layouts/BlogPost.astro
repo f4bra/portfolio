@@ -4,6 +4,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Comments from "../components/Comments.svelte";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -79,13 +80,16 @@ import "../styles/md.css";
                 )
               }
             </div>
-            <h1 class="text-3xl font-bold m-5">{title}</h1>
+            <h1 class="text-5xl font-bold m-6">{title}</h1>
             <hr
               class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-25 dark:opacity-100"
             />
-            <hr class="border-gray-50 dark:border-gray-800" />
           </div>
           <slot />
+          <hr
+            class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-25 dark:opacity-100"
+          />
+          <Comments class="pt-5" client:load />
         </div>
       </article>
     </main>
