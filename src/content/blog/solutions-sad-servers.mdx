@@ -5,34 +5,74 @@ pubDate: "Jan 29 2024"
 heroImage: "/images/sad-servers.webp"
 ---
 
-Saint John
-Santiago
-Saskatoon
-Tokyo
-Manhattan
-Capetown
-Salta
-Jakarta
+SadServers is a LeetCode style puzzle for Site Reliability Engineers/DevOps Engineers or whatever Ops people in IT are called nowadays. The following is a writeup of walking through the challenges given.
 
-# Intro
+Advance Linux Commands
 
-SadServers is a LeetCode style puzzle for Sysadmins/Site Reliability Engineers/DevOps Engineers or whatever Ops people in IT are called nowadays. The following is a writeup of walking through the challenges given.
+``` yaml
+grep: Search for patterns in files, printing matching lines.
+df: Display filesystem disk space usage, showing available and used space on mounted filesystems.
+du: Display disk space usage of files and directories, summarizing their sizes.
+awk: A powerful text-processing tool for extracting and manipulating data from files.
+less: View file contents page by page, allowing navigation and search within large files.
+xargs: Build and execute command lines from standard input, often used with other commands for complex operations.
+```
 
-# Saint John
+## Index
+1. [Saint John](#Saint-John)
+2. ["Saskatoon": counting IPs.](#Saskatoon)
+
+
+## Saint John
 
 A developer created a testing program that is continuously writing to a log file /var/log/bad.log and filling up disk. You can check for example with tail -f /var/log/bad.log. This program is no longer needed. Find it and terminate it.
 
 So let’s see what is accessing this file with lsof:
 
-`
+```sh
 $ lsof /var/log/bad.log
 COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
 badlog.py 621 ubuntu 3w REG 259,1 10629 67701 /var/log/bad.log
-`
+```
 
 Second column lists the ID of the process what writes to the log.
 
 We’ll kill this process using kill:
-`
+```sh
 kill 621
-`
+```
+<p align="center">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdzbnAyMXZlM3BzdzgyMmtkN3UyZXo5cGlxZ3pvcXZuY2NiOGRhOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Zxensy1LgmIOvSXZry/giphy.gif" />
+</p>
+
+We can accomplish the same task in one command by grepping (filtering) the output of the lsof command and searching for "badlog.py". Then, we extract the second result and use it as a parameter with xargs to kill that specific PID.
+```sh
+lsof /var/log/bad.log | grep -w 'badlog.py' | awk '{print $2}' | xargs kill
+```
+
+## Saskatoon - counting IPs.
+
+As the title says we have to find what's the IP address that has the most requests in the file /home/admin/access.log.
+
+Using `less /home/admin/access.log` we can see all messages have the following format:
+`83.149.9.216 - - [17/May/2015:10:05:50 +0000] "GET /presentations/logstash-monitorama-2013/images/kibana-dashboard.png HTTP/1.1" 200 321631 "http://semicomplete.com/presentations/logstash-monitorama-2013/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36"`
+
+Looks like `awk` commmand is perfect for this scenario as it allows you to perform operations on text files, usually line by line. 
+By executing `awk '{print $1}' /home/admin/access.log` we can get first field of each line in the file.
+
+
+`awk '{print $1}' /home/admin/access.log | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}' > /home/admin/highestip.txt`
+
+
+&nbsp;
+
+
+<p style="text-align: center; font-size:3rem;">.</p>
+<p style="text-align: center; font-size:3rem;">.</p>
+<p style="text-align: center; font-size:3rem;">.</p>
+<p style="text-align: center; font-size:3rem;">Will update with more :)</p>
+&nbsp;
+<p align="center">
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGowYnd5ZGhyYTZkbDAzbXJiczgwOXVjYTliNXZ5a21rdXB3bWJiaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QXepMBK00lkUSJIlN6/giphy.gif" />
+</p>
+

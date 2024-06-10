@@ -1,8 +1,8 @@
 ---
 title: "Deploying Astro with AWS SST"
 heroImage: "/images/SST.webp"
-pubDate: "Jul 08 2022"
-udpateDate: "Jan 10 2024"
+pubDate: "Feb 10 2024"
+udpateDate: "Feb 13 2024"
 description: "Go live easy and cheap with Amazon SST"
 category: "Web"
 ---
@@ -17,6 +17,7 @@ AWS SST is a bit more complicated than other deployment services such as Vercel 
 <p align="center">
   <img src="https://media.giphy.com/media/4Hmjz2sqdtASJ2gFMH/giphy.gif" />
 </p>
+
 ## What is AWS SST?
 
 AWS Service Stack (SST) is an open-source framework for building serverlessapplications on AWS. It simplifies the development and deployment process by providing a higher-level abstraction and encouraging best practices for serverlessapplication architecture. SST works well with a variety of AWS services like Lambda, API Gateway, DynamoDB, and more, making it a great choice for deploying apps.
@@ -40,11 +41,11 @@ sudo ./aws/install
 
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
-4. **And of course, your Astro,  or Svelteapp**
+4. **And of course, your Astro, or Svelte app**
 
 ## Step 1: Create IAM and set up your credentials
 
-### Creating an IAM policy
+Creating an IAM policy
 
 I recommend to generate a role with the least privilege policies.
 
@@ -142,29 +143,44 @@ const command = new PutObjectCommand({
 const url = await getSignedUrl(new S3Client({}), command);
 ```
 
-## Step 5: Deploy your app
-
----
-
-With your app and API stack configured, it's time to deploy your app to AWS. To initiate the deployment process, execute the following command:
-
-bashCopy code
-
-`pnpm sst deploy`
-
-SST will bundle your app along with all its dependencies and upload them to AWS Lambda. Additionally, it will create the necessary API Gateway for your app to function as expected.
-
-## Step 6: Verify Your Deployment
-
----
-
-After the deployment process is complete, you will receive a URL where your app is hosted. Open this URL in your web browser to verify that your app is running correctly.
-
-## Step 7: Continuous Deployment
+## 🚀 Step 7: Deploy your app: Continuous Deployment
 
 ---
 
 For seamless continuous deployment, consider setting up a CI/CD pipeline using AWS CodePipeline and AWS CodeBuild. This allows automatic deployment of changes to your app whenever you push code to your repository.
+
+
+``` yaml
+name: SST deployment
+on: push
+
+concurrency:
+  group: merge-${{ github.ref }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  DeployApp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::893906031708:role/GitHub
+          role-duration-seconds: 3600
+          aws-region: eu-central-1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Deploy app
+        run: |
+          pnpm i && pnpm sst deploy
+```
 
 ## Conclusion
 
