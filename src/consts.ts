@@ -3,3 +3,6 @@
 
 export const SITE_TITLE = 'f4bra';
 export const SITE_DESCRIPTION = 'Welcome to my Portofolio!';
+
+export const NETWORK_CALC_TITLE = 'Visual Network Caculator';
+export const NETWORK_CALC_DESCRIPTION = 'CIDR visualization tool';

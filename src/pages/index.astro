@@ -1,16 +1,11 @@
 ---
 // Components
 import Aurora from "../components/Aurora.astro";
-import Socials from "../components/Socials.astro";
 import LogoSlider from "../components/LogoSlider.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Carousel from "../components/Carousel.astro";
-import Project1 from "../components/Project1.astro";
-import Project2 from "../components/Project2.astro";
-import Project3 from "../components/Project3.astro";
 
 // Svgs
-import Lab from "../components/icons/Lab.astro";
 import Accenture from "../components/icons/Accenture.astro";
 import Mercedes from "../components/icons/Mercedes.astro";
 import Harmonic from "../components/icons/Harmonic.astro";
@@ -106,18 +101,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
                 </p>
               </div>
             </div>
-            <div class="p-4 xs:px-10 xs:pt-10">
-              <div class="flex justify-end mb-2">
-                <div class="flex justify-end text-right">
-                  <p class="text-sm font-bold uppercase">Find me at</p>
-                </div>
-              </div>
-              <div class="flex justify-end">
-                <div class="flex justify-end text-right">
-                  <Socials />
-                </div>
-              </div>
-            </div>
           </div>
           <div
             class="order-3 col-span-12 border-x border-t border-gray-30 bg-gray-5/20 bg-dotted-light bg-center p-4 dark:border-gray-800 dark:bg-transparent dark:bg-dotted-dark xs:p-8 xl:order-3 xl:col-span-4 xl:border-l-0 xl:border-t-0"
@@ -126,17 +109,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
               class="flex items-center space-x-3"
               style="opacity: 1; transform: none;"
             >
-              <Lab />
               <div
-                class="text-sm font-bold uppercase tracking-wide text-gray-1000 dark:text-blue-400"
+                class="text-sm font-bold uppercase tracking-wide text-gray-1000"
               >
-                Projects
+                Find me at
               </div>
             </div>
             <div class="mt-4 grid grid-cols-6 gap-4 xs:mt-6 xs:gap-5">
               <a
+                href="https://www.linkedin.com/in/carlos-fabra-03a71988/"
                 target="_blank"
-                href="https://generatedhumans.com/"
                 class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
                 style="opacity: 1; transform: none;"
               >
@@ -145,18 +127,63 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
                 >
                   <div class="flex-shrink-0 p-6 pr-2">
                     <h3 class="text-3xl font-bold leading-none">
-                      Visual Network
+                      Connect on LinkedIn
                     </h3>
-                    <div class="mt-2 text-lg leading-snug text-gray-50">
-                      Calculate and manage CIDR
+                  </div>
+                  <div
+                    class="origin-top-left translate-x-2 translate-y-1 rotate-6 overflow-hidden opacity-20 transition-all duration-200 group-hover/card:translate-x-0 group-hover/card:translate-y-0 group-hover/card:rotate-0 group-hover/card:opacity-100"
+                  >
+                    <div class="mt-3 h-24 min-w-[120px] max-w-[200px]">
+                      <svg
+                        viewBox="0 0 28 28"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#fff"
+                        ><g stroke-width="0"></g><g
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></g><path
+                          d="M20 20h-4v-6.999c0-1.92-.847-2.991-2.366-2.991-1.653 0-2.634 1.116-2.634 2.991V20H7V7h4v1.462s1.255-2.202 4.083-2.202S20 7.986 20 11.558zM2.442 4.921A2.45 2.45 0 0 1 0 2.46 2.45 2.45 0 0 1 2.442 0a2.45 2.45 0 0 1 2.441 2.46 2.45 2.45 0 0 1-2.441 2.461M0 20h5V7H0z"
+                          fill-rule="evenodd"></path></svg
+                      >
                     </div>
                   </div>
-                  <Project1 />
                 </div>
               </a>
               <a
                 target="_blank"
-                href="https://marketplace.visualstudio.com/items?itemName=CarlosFabra.lucentum-vscode-theme"
+                href="../../public/curriculum.pdf"
+                target="_blank"
+                class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
+                style="opacity: 1; transform: none;"
+              >
+                <div
+                  class="flex h-full items-center justify-between space-x-4 bg-white transition-colors hover:bg-white/90 dark:bg-night dark:hover:bg-transparent"
+                >
+                  <div class="flex-shrink-0 p-6 pr-2">
+                    <h3 class="text-3xl font-bold leading-none">Download CV</h3>
+                  </div>
+                  <div
+                    class="origin-top-left translate-x-2 translate-y-1 rotate-6 overflow-hidden opacity-20 transition-all duration-200 group-hover/card:translate-x-0 group-hover/card:translate-y-0 group-hover/card:rotate-0 group-hover/card:opacity-100"
+                  >
+                    <div class="mt-3 h-24 min-w-[120px] max-w-[200px]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        ><g stroke-width="0"></g><g
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></g><path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M4.172 3.172C3 4.343 3 6.229 3 10v4c0 3.771 0 5.657 1.172 6.828S7.229 22 11 22h2c3.771 0 5.657 0 6.828-1.172S21 17.771 21 14v-4c0-3.771 0-5.657-1.172-6.828S16.771 2 13 2h-2C7.229 2 5.343 2 4.172 3.172M7.25 8A.75.75 0 0 1 8 7.25h8a.75.75 0 0 1 0 1.5H8A.75.75 0 0 1 7.25 8m0 4a.75.75 0 0 1 .75-.75h8a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75M8 15.25a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5z"
+                          fill="#fff"></path></svg
+                      >
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <a
+                target="_blank"
+                href="https://github.com/f4bra/portfolio"
                 class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
                 style="opacity: 1; transform: none;"
               >
@@ -165,31 +192,25 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
                 >
                   <div class="flex-shrink-0 p-6 pr-2">
                     <h3 class="text-3xl font-bold leading-none">
-                      VSCode Theme
+                      Portfolio Code
                     </h3>
-                    <div class="mt-2 text-lg leading-snug text-gray-50">
-                      My personal palette
+                  </div>
+                  <div
+                    class="origin-top-left translate-x-2 translate-y-1 rotate-6 overflow-hidden opacity-20 transition-all duration-200 group-hover/card:translate-x-0 group-hover/card:translate-y-0 group-hover/card:rotate-0 group-hover/card:opacity-100"
+                  >
+                    <div class="mt-3 h-24 min-w-[120px] max-w-[150px]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#fff"
+                        ><g stroke-width="0"></g><g
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></g><path
+                          d="M10 0c5.523 0 10 4.59 10 10.253 0 4.529-2.862 8.371-6.833 9.728-.507.101-.687-.219-.687-.492 0-.338.012-1.442.012-2.814 0-.956-.32-1.58-.679-1.898 2.227-.254 4.567-1.121 4.567-5.059 0-1.12-.388-2.034-1.03-2.752.104-.259.447-1.302-.098-2.714 0 0-.838-.275-2.747 1.051A9.4 9.4 0 0 0 10 4.958a9.4 9.4 0 0 0-2.503.345C5.586 3.977 4.746 4.252 4.746 4.252c-.543 1.412-.2 2.455-.097 2.714-.639.718-1.03 1.632-1.03 2.752 0 3.928 2.335 4.808 4.556 5.067-.286.256-.545.708-.635 1.371-.57.262-2.018.715-2.91-.852 0 0-.529-.985-1.533-1.057 0 0-.975-.013-.068.623 0 0 .655.315 1.11 1.5 0 0 .587 1.83 3.369 1.21.005.857.014 1.665.014 1.909 0 .271-.184.588-.683.493C2.865 18.627 0 14.783 0 10.253 0 4.59 4.478 0 10 0"
+                          fill-rule="evenodd"></path></svg
+                      >
                     </div>
                   </div>
-                  <Project2 />
-                </div>
-              </a>
-              <a
-                target="_blank"
-                href="https://github.com/kuldar/untick"
-                class="group/card relative col-span-6 overflow-hidden rounded-2xl border border-gray-50 bg-white bg-gradient-to-br from-gray-35 via-white to-gray-40 transition-colors hover:border-gray-50 active:top-[1px] dark:border-gray-800 dark:bg-night dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 dark:hover:border-gray-500/70 last:max-[1103px]:col-span-6 md:col-span-3 min-[1104px]:col-span-2 xl:col-span-6"
-                style="opacity: 1; transform: none;"
-              >
-                <div
-                  class="flex h-full items-center justify-between space-x-4 bg-white transition-colors hover:bg-white/90 dark:bg-night dark:hover:bg-transparent"
-                >
-                  <div class="flex-shrink-0 p-6 pr-2">
-                    <h3 class="text-3xl font-bold leading-none">Bookmark_X</h3>
-                    <div class="mt-2 text-lg leading-snug text-gray-50">
-                      Tiny Chrome extension
-                    </div>
-                  </div>
-                  <Project3 />
                 </div>
               </a>
             </div>
@@ -197,11 +218,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
           <div
             class="order-1 col-span-12 flex border-x border-gray-30 px-4 pt-4 dark:border-gray-800 xs:px-8 xs:pt-8 md:order-2 md:col-span-6 md:border-l-0 md:border-r md:pb-4 min-[896px]:col-span-5 xl:order-2 xl:col-span-4"
           >
-            <div
-              class="relative flex h-80 w-64 rounded-2xl border border-gray-50/5 bg-night bg-cover bg-center bg-no-repeat p-2 brightness-125 dark:brightness-100 md:h-auto md:w-full"
-            >
-              <Carousel />
-            </div>
+            <Carousel />
           </div>
         </div>
       </div>
@@ -331,18 +348,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
               class="flex items-center space-x-3"
               style="opacity: 1; transform: none;"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-4 text-blue-500 dark:text-white"
-              >
-                <path
-                  d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"></path>
-              </svg>
               <div
-                class="text-sm font-bold uppercase tracking-wide text-gray-1000 dark:text-blue-400"
+                class="text-sm font-bold uppercase tracking-wide text-gray-1000"
               >
                 <a href="/blog">Blog</a>
               </div>

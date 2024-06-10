@@ -1,5 +1,11 @@
 ---
 import { SITE_TITLE } from "../consts";
+
+let secondSlashIndex = Astro.url.pathname.indexOf("/", 1);
+let rootHref = Astro.url.pathname.substring(0, secondSlashIndex); // Finding the index of the second "/"
+
+let firstPart = Astro.url.pathname.split("/")[1];
+let rootPath = firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
 ---
 
 <header class="border-y border-gray-50 dark:border-gray-800">
@@ -15,7 +21,7 @@ import { SITE_TITLE } from "../consts";
             <a href="/" class="no-underline">{SITE_TITLE}</a>
           </h2>
           <div class="internal-links space-x-4">
-            <a href="/blog" class="no-underline">Blog</a>
+            <a href={rootHref} class="no-underline">{rootPath}</a>
           </div>
           <div class="flex space-x-4">
             <a href="https://twitter.com/Carlos50128004" target="_blank">
