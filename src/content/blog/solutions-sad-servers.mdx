@@ -1,29 +1,36 @@
 ---
 title: "Solving Sadservers"
 description: "SRE/DevOps challenges"
-pubDate: "Jan 29 2024"
+pubDate: "Jul 07 2024"
 heroImage: "/images/sad-servers.webp"
 ---
 
 SadServers is a LeetCode style puzzle for Site Reliability Engineers/DevOps Engineers or whatever Ops people in IT are called nowadays. The following is a writeup of walking through the challenges given.
 
-Advance Linux Commands
+
+
+## Index
+1. [❌ Saint John](#-saint-john)
+2. [🧮 Saskatoon - Counting IPs](#-saskatoon---counting-ips)
+3. [🔡 Santiago - Find the secret combination](#-santiago---find-the-secret-combination)
+4. [🗡️ The Command Line Murders](#-the-command-line-murders)
+5. [🙋‍♂️ Taipei - Come a-knocking](#-taipei---come-a-knocking)
+
+
+## Linux Commands Cheatsheet
 
 ``` yaml
 grep: Search for patterns in files, printing matching lines.
+wc: Counts lines, words, and characters in one or more files. (-l for counting lines)
 df: Display filesystem disk space usage, showing available and used space on mounted filesystems.
 du: Display disk space usage of files and directories, summarizing their sizes.
 awk: A powerful text-processing tool for extracting and manipulating data from files.
 less: View file contents page by page, allowing navigation and search within large files.
 xargs: Build and execute command lines from standard input, often used with other commands for complex operations.
+knock: used to send a sequence of connection attempts (knocks) to specified ports on a remote server to trigger actions such as opening a port.
 ```
 
-## Index
-1. [Saint John](#Saint-John)
-2. ["Saskatoon": counting IPs.](#Saskatoon)
-
-
-## Saint John
+## ❌ Saint John
 
 A developer created a testing program that is continuously writing to a log file /var/log/bad.log and filling up disk. You can check for example with tail -f /var/log/bad.log. This program is no longer needed. Find it and terminate it.
 
@@ -41,36 +48,182 @@ We’ll kill this process using kill:
 ```sh
 kill 621
 ```
-<p align="center">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjdzbnAyMXZlM3BzdzgyMmtkN3UyZXo5cGlxZ3pvcXZuY2NiOGRhOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Zxensy1LgmIOvSXZry/giphy.gif" />
-</p>
 
 We can accomplish the same task in one command by grepping (filtering) the output of the lsof command and searching for "badlog.py". Then, we extract the second result and use it as a parameter with xargs to kill that specific PID.
 ```sh
 lsof /var/log/bad.log | grep -w 'badlog.py' | awk '{print $2}' | xargs kill
 ```
 
-## Saskatoon - counting IPs.
+## 🧮 Saskatoon - Counting IPs
 
-As the title says we have to find what's the IP address that has the most requests in the file /home/admin/access.log.
+In this scenario we have to find what's the IP address that has the most requests in the file /home/admin/access.log.
 
-Using `less /home/admin/access.log` we can see all messages have the following format:
-`83.149.9.216 - - [17/May/2015:10:05:50 +0000] "GET /presentations/logstash-monitorama-2013/images/kibana-dashboard.png HTTP/1.1" 200 321631 "http://semicomplete.com/presentations/logstash-monitorama-2013/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36"`
+By reading the file we can see all messages have the following format:
+
+```bash
+less /home/admin/access.log
+83.149.9.216 - - [17/May/2015:10:05:50 +0000] "GET /presentations/logstash-monitorama-2013/images/kibana-dashboard.png HTTP/1.1" 200 321631 "http://semicomplete.com/presentations/logstash-monitorama-2013/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36"
+```
 
 Looks like `awk` commmand is perfect for this scenario as it allows you to perform operations on text files, usually line by line. 
-By executing `awk '{print $1}' /home/admin/access.log` we can get first field of each line in the file.
+In this way we can get first field of each line in the file.
+
+```bash
+awk '{print $1}' /home/admin/access.log
+awk '{print $1}' /home/admin/access.log | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}' > /home/admin/highestip.txt
+```
+
+## 🔡 Santiago - Find the secret combination
+
+In this scenario, we are going to count the number of times "Alice" appears in some text files.
+
+- The first command is a simple word count (wc) of the lines that contain "Alice".
+- The second command filters for "Alice" and includes the next line with the `-A 1` flag. It then filters again to extract numbers.
+
+Afterward, it's simply a matter of writing the two results to the file in the specified format.
 
 
-`awk '{print $1}' /home/admin/access.log | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}' > /home/admin/highestip.txt`
+```bash
+cat /home/admin/*.txt | grep Alice | wc -l  > /home/admin/solution
+cat /home/admin/1342-0.txt | grep Alice -A 1 | grep -o '[0-9]\+' >> /home/admin/solution
+```
 
 
-&nbsp;
+## 🗡️ The Command Line Murders
+
+This one was really fun, but I think it could easily take more than 20 minutes if you are not using the hints.
+
+First, we are going to read the crimescene file and filter by the important information, the clues:
+
+```bash
+grep "CLUE" /home/admin/clmystery/mystery/crimescene
+- Tall man 6'
+- Cards for Rotary_Club, Delta SkyMiles, the local library, and the Museum of Bash History.
+- A woman left right before they heard the shots. The name on her latte was Annabel, she had blond spiky hair and a New Zealand accent.
+```
+
+Let's investigate the witness. Filtering for women named Annabel, we get two results:
+
+```bash
+cat /home/admin/clmystery/mystery/people | grep Annabel
+Annabel Sun     F       26      Hart Place, line 40
+Annabel Church  F       38      Buckingham Place, line 179
+```
+
+Following the addresses, we can see what information the interviews have. As we know that Annabel has a New Zealand accent, we can discard the first result.
+
+```bash
+head -n 40 /home/admin/clmystery/mystery/streets/Hart_Place | tail -n 1
+SEE INTERVIEW #47246024
+
+cat /home/admin/clmystery/mystery/interviews/interview-47246024 
+Ms. Sun has brown hair and is not from New Zealand.  Not the witness from the cafe.
+
+
+head -n 179 /home/admin/clmystery/mystery/streets/Buckingham_Place | tail -n 1
+SEE INTERVIEW #699607
+
+cat /home/admin/clmystery/mystery/interviews/interview-699607 
+Interviewed Ms. Church at 2:04 pm.  Witness stated that she did not see anyone she could identify as the shooter, that she ran away as soon as the shots were fired.
+However, she reports seeing the car that fled the scene.  Describes it as a blue Honda, with a license plate that starts with "L337" and ends with "9"
+```
+
+
+So now we know that the thief drives a blue Honda and part of its plate number. Also, the owner must be a man with a height greater than 6'. After filtering car information, we end up with two results.
+
+```bash
+grep "L337..9" /home/admin/clmystery/mystery/vehicles -A5 | grep "Honda" -A4 -B1 | grep "Blue" -A3 -B2
+
+License Plate L337DV9
+Make: Honda
+Color: Blue
+Owner: Joe Germuska
+Height: 6'2"
+Weight: 164 lbs
+--
+License Plate L3375A9
+Make: Honda
+Color: Blue
+Owner: Jeremy Bowers
+Height: 6'1"
+Weight: 204 lbs
+```
+
+Let's quickly check if there have been any interviews done with these guys:
+
+```bash
+grep -E "Joe Germuska|Jeremy Bowers" /home/admin/clmystery/mystery/people
+Joe Germuska    M       65      Plainfield Street, line 275
+Jeremy Bowers   M       34      Dunstable Road, line 284
+
+
+head -n 275 /home/admin/clmystery/mystery/streets/Plainfield_Street | tail -n 1
+SEE INTERVIEW #29741223
+
+cat /home/admin/clmystery/mystery/interviews/interview-29741223 
+Not available to interview
+
+
+head -n 284 /home/admin/clmystery/mystery/streets/Dunstable_Road | tail -n 1
+SEE INTERVIEW #9620713
+
+cat /home/admin/clmystery/mystery/interviews/interview-9620713 
+Home appears to be empty, no answer at the door.
+After questioning neighbors, appears that the occupant may have left for a trip recently.
+Considered a suspect until proven otherwise, but would have to eliminate other suspects to confirm.
+```
+
+Nothing really useful, but if you remember from the clues, we can check their memberships and see which one matches all the ones mentioned in the clue:
+
+```bash
+grep "Jeremy Bowers" /home/admin/clmystery/mystery/memberships/Museum_of_Bash_History  /home/admin/clmystery/mystery/memberships/Rotary_Club /home/admin/clmystery/mystery/memberships/Delta_SkyMiles  /home/admin/clmystery/mystery/memberships/Terminal_City_Library 
+/home/admin/clmystery/mystery/memberships/Museum_of_Bash_History:Jeremy Bowers
+/home/admin/clmystery/mystery/memberships/Delta_SkyMiles:Jeremy Bowers
+/home/admin/clmystery/mystery/memberships/Terminal_City_Library:Jeremy Bowers
+
+grep "Joe Germuska" /home/admin/clmystery/mystery/memberships/Museum_of_Bash_History  /home/admin/clmystery/mystery/memberships/Rotary_Club /home/admin/clmystery/mystery/memberships/Delta_SkyMiles  /home/admin/clmystery/mystery/memberships/Terminal_City_Library 
+/home/admin/clmystery/mystery/memberships/Museum_of_Bash_History:Joe Germuska
+/home/admin/clmystery/mystery/memberships/Rotary_Club:Joe Germuska
+/home/admin/clmystery/mystery/memberships/Delta_SkyMiles:Joe Germuska
+/home/admin/clmystery/mystery/memberships/Terminal_City_Library:Joe Germuska
+```
+
+We see that only Joe matches all four memberships, so we can conclude this is our guy.
+
+```bash
+echo "Joe Germuska" > ~/mysolution
+```
+
+
+## 🙋‍♂️ Taipei - Come a-knocking
+
+In this scenario we are going to learn about Port Knocking.
+
+Port knocking is a security technique used to control access to a network service by requiring clients to perform a specific sequence of connection attempts, or "knocks," on closed ports. Here's how it works:
+
+- **Initial State:** All ports on the server are closed.
+- **Knock Sequence:** The client sends a sequence of connection attempts to predefined ports.
+- **Sequence Recognition:** The server monitors and verifies the sequence. If correct, it temporarily opens the desired port.
+- **Access Granted:** The client can access the service, after which the port may be closed again.
+
+We are given a web server listening on port 80. In this scenario is just a matter of knocking this port, but realisticly it would be a secounce of port what enables us to communicate.
+
+```bash
+# Example
+knock <server-ip> 9012 5678 1234
+
+# Solution
+knock localhost 80
+curl localhost
+```
+
+Now if we curl localhost we get a message instead of a connection refused.
+
 
 
 <p style="text-align: center; font-size:3rem;">.</p>
 <p style="text-align: center; font-size:3rem;">.</p>
 <p style="text-align: center; font-size:3rem;">.</p>
-<p style="text-align: center; font-size:3rem;">Will update with more :)</p>
 &nbsp;
 <p align="center">
   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGowYnd5ZGhyYTZkbDAzbXJiczgwOXVjYTliNXZ5a21rdXB3bWJiaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QXepMBK00lkUSJIlN6/giphy.gif" />
