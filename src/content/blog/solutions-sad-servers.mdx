@@ -15,6 +15,8 @@ SadServers is a LeetCode style puzzle for Site Reliability Engineers/DevOps Engi
 3. [🔡 Santiago - Find the secret combination](#-santiago---find-the-secret-combination)
 4. [🗡️ The Command Line Murders](#-the-command-line-murders)
 5. [🙋‍♂️ Taipei - Come a-knocking](#-taipei---come-a-knocking)
+6. [➕ Lhasa - Easy Math](#-lhasa---easy-math)
+7. [🐘 Bucharest - Connecting to Postgres](#-bucharest---connecting-to-postgres)
 
 
 ## Linux Commands Cheatsheet
@@ -28,6 +30,7 @@ awk: A powerful text-processing tool for extracting and manipulating data from f
 less: View file contents page by page, allowing navigation and search within large files.
 xargs: Build and execute command lines from standard input, often used with other commands for complex operations.
 knock: used to send a sequence of connection attempts (knocks) to specified ports on a remote server to trigger actions such as opening a port.
+bc: do basic mathematical calculations. (echo "12+5" | bc) => 17
 ```
 
 ## ❌ Saint John
@@ -218,6 +221,64 @@ curl localhost
 ```
 
 Now if we curl localhost we get a message instead of a connection refused.
+
+## ➕ Lhasa - Easy Math
+
+We are given a file with two columns. The first column is just a count of scores, and the second column contains the actual scores. We need to calculate the average score.
+
+This is a very good case to use the `awk` command, as we can grab the second column by using its natural delimiter, the blank space.
+```bash
+awk '{print $2}' /home/admin/scores.txt 
+``` 
+
+We get the total number of scores by using NR to keep a current count of the number of input records. Remember that records are usually lines.
+The total score is calculated by looping through the values using the `+=` operator.
+
+```bash
+count=$(awk 'END {print NR}' /home/admin/scores.txt)
+sum=$(awk '{sum += $2} END {print sum}' /home/admin/scores.txt)
+``` 
+
+Finally, to calculate the average, we divide the total score by the number of scores and use `bc` (basic calculator) to perform the division and format the output to two decimal places with `%.2f`.
+
+```bash
+average=$(echo "scale=2; $sum / $count" | bc | awk '{printf "%.2f", $0}')
+
+echo $average > /home/admin/solution
+``` 
+
+## 🐘 Bucharest - Connecting to Postgres
+
+In this server, we have a PostgreSQL database, and the default connection is not working.
+
+We can verify that the service is running and in a healthy state with:
+```bash
+systemctl --type=service --state=running
+```
+Inspecting the PostgreSQL service, we can see the path where the configuration files are located:
+
+```bash
+systemctl status postgresql@13-main
+  641 /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf
+```
+
+Running the command given in the problem description, we get the following error:
+```bash
+PGPASSWORD=app1user psql -h 127.0.0.1 -d app1 -U app1user -c '\q'
+psql: error: FATAL:  pg_hba.conf rejects connection for host "127.0.0.1", user "app1user", database "app1", SSL on
+FATAL:  pg_hba.conf rejects connection for host "127.0.0.1", user "app1user", database "app1", SSL off
+```
+
+Let's check the file it is complaining about, pg_hba.conf. The pg_hba.conf file is a PostgreSQL configuration file that stands for "PostgreSQL Host-Based Authentication." This file controls client authentication, i.e., it specifies which users can connect to which databases from which hosts and which authentication methods they must use.
+
+We can see that all connections were rejected. We can change the configuration to "trust" and restart the service.
+```bash
+sudo su
+vi /etc/postgresql/13/main/pg_hba.conf
+  host    all             all             all                     reject -> trust
+systemctl restart postgresql
+```
+Now we can connect using the given credentials.
 
 
 
