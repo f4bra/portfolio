@@ -1,0 +1,72 @@
+---
+title: "Pulumi Login using Azure Private Endpoint"
+heroImage: "/images/pulumi-azure-private-endpoint.webp"
+pubDate: "Jan 20 2025"
+updateDate: "Jan 20 2025"
+description: "Securely access your Pulumi state using Azure Storage Account Private Endpoints"
+category: "IaC, Azure"
+---
+
+
+Pulumi supports logging in to object storage backends from major cloud providers (AWS, GCP, and Azure) to manage state independently of the Pulumi Cloud. By default, this requires Public Network Access to the Storage Account.
+
+However, for enhanced security, you can disable public access and instead use Private Endpoints to access your stacks without exposing them to the internet.
+
+
+<p align="center">
+  <img src="/images/StorageAccountNetworking.webp" alt="Storage Account Networking with Private Endpoint" />
+</p>
+ 
+Private Endpoints and Private Links may seem complex when first reading the documentation, but the concept is straightforward:
+
+- A Private Endpoint is essentially a Network Interface (NIC) with an IP address assigned from your VNet
+- A Private Link is an association between this NIC and a PaaS service (like Storage Accounts or Databases) that typically doesn't have direct network interfaces
+
+Take a look to the following diagram:
+
+<p align="center">
+  <img src="/images/PrivateEndpointDiagram.webp" alt="Private Endpoint Diagram" />
+</p>
+
+In this setup:
+1. We create a Private Endpoint with an IP address from our VNet and link it to the Storage Account
+2. We configure a private DNS zone with an A record that resolves the FQDN `mystorageaccount.privatelink.blob.core.windows.net` to your private IP (e.g., 10.0.0.6)
+
+
+Now if we do a nslookup externally we can see that it will resolve to the public IP, but if we try to access it as we disabled public network access we will get a 403 as expected.
+
+```sh
+# $ nslookup mystorageaccount.privatelink.blob.core.windows.net 
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+Non-authoritative answer: mystorageaccount.privatelink.blob.core.windows.net
+canonical name=blob.ams23prdstr@2a.store.core.windows.net.
+Name: blob.ams23prdstre2a.store.core.windows.net
+Address: 52.239.213.100
+
+
+$ pulumi login azblob://<my-blob-container>/<my-folder> 
+error: problem logging in: read ".pulumi/meta.yaml": blob (key ".pulumi/meta.yaml") (code-Unknown): GET https://mystorageaccount.blob.core.windows.net//<my-blob-container>/<my-folder>/.pulumi/meta.yaml RESPONSE 403: 403 This request is not authorized to perform this operation.
+ERROR CODE: AuthorizationFailure
+<?xml version="1.0" encoding="utf-8"?><Error><Code>AuthorizationFailure</code><Message>This request is not authorized to perform this operation.
+
+```
+
+On the other hand, doing the same thing inside our network we can see that it resolves to the private IP and we can actually do the login.
+ 
+```sh
+$ nslookup mystorageaccount.privatelink.blob.core.windows.net 
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+Non-authoritative answer:
+Name: mystorageaccount.privatelink.blob.core.windows.net
+Address: 10.0.10.8
+
+$ pulumi login azblob://<my-blob-container>/<my-folder> 
+Logged in to <your-vm> as <your-user> (azblob://<my-blob-container>/<my-folder>) 
+```
+
+With this Private Endpoint set up we have solved the network layer, but make sure you have the required role at RBAC level and "Storage Blob Data Contributor role" is assigned to your user or Service Principal. For more information about using Azure Blob Storage as a backend, check out the [Pulumi documentation](https://www.pulumi.com/docs/iac/concepts/state-and-backends/#azure-blob-storage).
+
+
+ 

@@ -12,5 +12,13 @@ const blog = defineCollection({
 		heroImage: z.string().optional(),
 	}),
 });
+const terms = defineCollection({
+	type: 'content',
+	// Type-check frontmatter using a schema
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+	}),
+});
 
-export const collections = { blog };
+export const collections = { blog, terms};

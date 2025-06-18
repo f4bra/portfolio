@@ -1,0 +1,13 @@
+---
+import Terms from "../../layouts/Terms.astro";
+import { getEntry } from "astro:content";
+
+const terms = await getEntry("terms", "terms");
+const { Content } = await terms.render();
+
+---
+
+<Terms {...terms.data}>
+  <Content />
+</Terms>
+

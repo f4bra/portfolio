@@ -60,7 +60,6 @@ import "../styles/md.css";
   </head>
   <body>
     <Header title={title} />
-    bo
     <main class="mx-auto max-w-8xl px-2 xs:px-6 sm:px-10">
       <article
         class="border-x border-gray-50 py-8 dark:border-gray-800 xs:p-20"
@@ -95,40 +94,6 @@ import "../styles/md.css";
         </div>
       </article>
     </main>
-    <!-- <main class="mx-auto max-w-8xl px-2 xs:px-6 sm:px-10">
-      <article
-        class="border-x border-gray-50 py-8 dark:border-gray-800 xs:p-20"
-      >
-        <div
-          class="text-center mx-auto max-w-6xl text-gray-50 dark:text-gray-400"
-        >
-          {heroImage && <img src={heroImage} alt="" />}
-        </div>
-        <div class="max-w-3xl text-gray-200 m-auto pt-5 p-1">
-          <div class="text-center mt-12">
-            <div class="text-gray-500">
-              <FormattedDate date={pubDate} />
-              {
-                updatedDate && (
-                  <div class="italic m-5">
-                    Last updated on <FormattedDate date={updatedDate} />
-                  </div>
-                )
-              }
-            </div>
-            <h1 class="text-5xl font-bold m-6">{title}</h1>
-            <hr
-              class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-25 dark:opacity-100"
-            />
-          </div>
-          <slot />
-          <hr
-            class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-25 dark:opacity-100"
-          />
-          <Comments class="pt-5" client:load />
-        </div>
-      </article>
-    </main> -->
     <Footer />
   </body>
 </html>
